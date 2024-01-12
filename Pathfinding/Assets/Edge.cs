@@ -1,35 +1,32 @@
 using UnityEngine;
 
-public class Edge
-{
-    Node from;
-    Node to;
-    int cost;
+public class Edge {
+    private Node m_from;
+    private Node m_to;
+    private int m_cost;
 
-    public Edge()
-    {
-       
+    public Edge() {
     }
 
-    public Edge(ref Node _from, ref Node _to)
-    {
-        from = _from;
-        to = _to;
+    public Edge(ref Node t_from, ref Node t_to) {
+        m_from = t_from;
+        m_to = t_to;
     }
 
-    public void setEdges(ref Node _from, ref Node _to)
-    {
-        from = _from;
-        to = _to;
+    public void setEdges(ref Node t_from, ref Node t_to) {
+        m_from = t_from;
+        m_to = t_to;
     }
 
-    public Node getNodeFrom()
-    {
-        return from;
+    public void setCost(int t_cost) {
+        m_cost = t_cost;
     }
 
-    public Node getNodeTo()
-    {
-        return to;
+    public Node getNodeFrom() {
+        return m_from;
+    }
+
+    public Node getNodeTo() {
+        return m_to;
     }
 }

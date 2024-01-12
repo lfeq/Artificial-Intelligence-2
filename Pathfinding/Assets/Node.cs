@@ -1,16 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Node
-{
-    private Vector2 pos;
-    List<Edge> edges;
-    int holisitc;
+public class Node {
+    private Vector2 m_pos;
+    private List<Edge> m_edges;
+    private int m_holisitc;
 
-    public Node(Vector2 _pos, List<Edge> _edges, int _holistic)
-    {
-        pos = _pos;
-        edges = _edges;
-        holisitc = _holistic;
+    public Node() {
+    }
+
+    public Node(Vector2 t_pos, List<Edge> t_edges, int t_holistic) {
+        m_pos = t_pos;
+        m_edges = t_edges;
+        m_holisitc = t_holistic;
+    }
+
+    public void SetEdges(List<Edge> t_edges) {
+        m_edges = t_edges;
+    }
+
+    public void SetHolistic(int t_holistic) {
+        m_holisitc = t_holistic;
     }
 }
