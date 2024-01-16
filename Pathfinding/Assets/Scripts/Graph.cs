@@ -1,10 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
 
 public class Graph {
     private List<Node> nodes;
-    private Queue<Node> porAnalizar = new Queue<Node> ();
-    private Queue<Node> hold = new Queue<Node> ();
+    private Queue<Node> porAnalizar = new Queue<Node>();
+    private Queue<Node> hold = new Queue<Node>();
 
     public Graph() {
         nodes = new List<Node>();
@@ -97,36 +96,28 @@ public class Graph {
         node8.SetHolistic(7);
     }
 
-    public void AStar()
-    {
-
+    public void AStar() {
     }
 
-    private void Analizar(Node t_node)
-    {
+    private void Analizar(Node t_node) {
         int cost = 0;
         int minCost = 0;
         int smallestNodeCostIndex = 0;
-        for(int i = 0; i < t_node.GetEdges().Count; i++)
-        {
+        for (int i = 0; i < t_node.GetEdges().Count; i++) {
             Edge tempEdge = t_node.GetEdges()[i];
             cost = tempEdge.getNodeTo().GetHolisitc() + tempEdge.getCost();
-            if(i == 0)
-            {
+            if (i == 0) {
                 minCost = cost;
                 continue;
             }
-            if(minCost > cost)
-            {
+            if (minCost > cost) {
                 minCost = cost;
                 smallestNodeCostIndex = i;
             }
         }
         porAnalizar.Enqueue(t_node.GetEdges()[smallestNodeCostIndex].getNodeTo());
-        for (int i = 0; i < t_node.GetEdges().Count; i++)
-        {
-            if(t_node.GetEdges()[smallestNodeCostIndex].getNodeTo() == t_node.GetEdges()[i].getNodeTo())
-            {
+        for (int i = 0; i < t_node.GetEdges().Count; i++) {
+            if (t_node.GetEdges()[smallestNodeCostIndex].getNodeTo() == t_node.GetEdges()[i].getNodeTo()) {
                 continue;
             }
             hold.Enqueue(t_node.GetEdges()[i].getNodeTo());

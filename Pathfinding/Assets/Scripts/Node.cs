@@ -1,10 +1,10 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Node {
+public class Node : MonoBehaviour {
     private Vector2 m_pos;
-    private List<Edge> m_edges;
-    private int m_holisitc;
+    private List<Edge> m_edges = new List<Edge>();
+    [SerializeField] private int m_holisitc;
     private Edge m_correctEdge;
 
     public Node() {
@@ -24,23 +24,23 @@ public class Node {
         m_holisitc = t_holistic;
     }
 
-    public void SetCorrectEdge(Edge t_edge)
-    {
+    public void SetCorrectEdge(Edge t_edge) {
         m_correctEdge = t_edge;
     }
 
-    public Edge GetCorrectEdge()
-    {
+    public void AddEdgeToEdgeList(Edge t_edge) {
+        m_edges.Add(t_edge);
+    }
+
+    public Edge GetCorrectEdge() {
         return m_correctEdge;
     }
 
-    public List<Edge> GetEdges()
-    {
+    public List<Edge> GetEdges() {
         return m_edges;
     }
 
-    public int GetHolisitc()
-    {
+    public int GetHolisitc() {
         return m_holisitc;
     }
 }

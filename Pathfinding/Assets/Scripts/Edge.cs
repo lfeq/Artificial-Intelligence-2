@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Edge {
     private Node m_from;
     private Node m_to;
@@ -19,6 +17,11 @@ public class Edge {
         m_to = t_to;
     }
 
+    public void setEdges(Node t_from, Node t_to) {
+        m_from = t_from;
+        m_to = t_to;
+    }
+
     public void setCost(int t_cost) {
         m_cost = t_cost;
     }
@@ -31,5 +34,7 @@ public class Edge {
         return m_to;
     }
 
-    public int getCost() { return m_cost;}
+    public int getCost() {
+        return m_cost;
+    }
 }
