@@ -4,6 +4,7 @@ public class Edge {
     private Node m_from;
     private Node m_to;
     private int m_cost;
+    private bool m_traversed;
 
     public Edge() {
     }
@@ -29,4 +30,6 @@ public class Edge {
     public Node getNodeTo() {
         return m_to;
     }
+
+    public int getCost() { return m_cost;}
 }

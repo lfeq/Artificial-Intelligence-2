@@ -5,6 +5,7 @@ public class Node {
     private Vector2 m_pos;
     private List<Edge> m_edges;
     private int m_holisitc;
+    private Edge m_correctEdge;
 
     public Node() {
     }
@@ -21,5 +22,25 @@ public class Node {
 
     public void SetHolistic(int t_holistic) {
         m_holisitc = t_holistic;
+    }
+
+    public void SetCorrectEdge(Edge t_edge)
+    {
+        m_correctEdge = t_edge;
+    }
+
+    public Edge GetCorrectEdge()
+    {
+        return m_correctEdge;
+    }
+
+    public List<Edge> GetEdges()
+    {
+        return m_edges;
+    }
+
+    public int GetHolisitc()
+    {
+        return m_holisitc;
     }
 }
