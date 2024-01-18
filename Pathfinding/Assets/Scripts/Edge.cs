@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class Edge {
     private Node m_from;
     private Node m_to;

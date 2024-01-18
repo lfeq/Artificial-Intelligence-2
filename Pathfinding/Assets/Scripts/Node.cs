@@ -4,7 +4,7 @@ using UnityEngine;
 public class Node : MonoBehaviour {
     private Vector2 m_pos;
     private List<Edge> m_edges = new List<Edge>();
-    [SerializeField] private int m_holisitc;
+    private int m_holisitc;
     private Edge m_correctEdge;
 
     public Node() {
