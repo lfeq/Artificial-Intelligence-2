@@ -142,6 +142,9 @@ public class GridGenerator : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Spawns tiles in the grid.
+    /// </summary>
     private void SpawnWithoutDelay() {
         int center = m_gridWidth / 2;
         if (randomCenterToggle.isOn) {
