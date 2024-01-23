@@ -105,7 +105,7 @@ public class Graph {
         int smallestNodeCostIndex = 0;
         for (int i = 0; i < t_node.GetEdges().Count; i++) {
             Edge tempEdge = t_node.GetEdges()[i];
-            cost = tempEdge.getNodeTo().GetHolisitc() + tempEdge.getCost();
+            cost = tempEdge.getNodeTo().GetHolisitc() + tempEdge.getDistance();
             if (i == 0) {
                 minCost = cost;
                 continue;
@@ -113,6 +113,12 @@ public class Graph {
             if (minCost > cost) {
                 minCost = cost;
                 smallestNodeCostIndex = i;
+            }
+            if(tempEdge.getNodeTo().GetCaminoRecorrido() == -1)
+            {
+                tempEdge.getNodeTo().SetCost(cost); 
+                tempEdge.getNodeTo().SetCaminoRecorrido(tempEdge.getDistance() + t_node.GetCaminoRecorrido());
+                tempEdge.getNodeTo().SetCorrectEdge(tempEdge);
             }
         }
         porAnalizar.Enqueue(t_node.GetEdges()[smallestNodeCostIndex].getNodeTo());

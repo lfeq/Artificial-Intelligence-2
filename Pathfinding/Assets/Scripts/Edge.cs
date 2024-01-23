@@ -4,7 +4,7 @@ using System;
 public class Edge {
     private Node m_from;
     private Node m_to;
-    private int m_cost;
+    private int m_distance;
     private bool m_traversed;
 
     public Edge() {
@@ -25,8 +25,8 @@ public class Edge {
         m_to = t_to;
     }
 
-    public void setCost(int t_cost) {
-        m_cost = t_cost;
+    public void setCost(int t_distance) {
+        m_distance = t_distance;
     }
 
     public Node getNodeFrom() {
@@ -37,7 +37,7 @@ public class Edge {
         return m_to;
     }
 
-    public int getCost() {
-        return m_cost;
+    public int getDistance() {
+        return m_distance;
     }
 }
