@@ -248,7 +248,10 @@ MonoBehaviour:
   paintedTileColor: {r: 1, g: 0, b: 0, a: 1}
   gridWidth: 50
   gridHeight: 50
-  cubeProbability: 0.199
+  neighbourCellsToBeAlive: 5
+  neighbourCellsToBeDead: 2
+  iterations: 2
+  cubeProbability: 0.5
 --- !u!4 &1940742121
 Transform:
   m_ObjectHideFlags: 0
