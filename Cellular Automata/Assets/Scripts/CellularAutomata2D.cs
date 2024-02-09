@@ -99,7 +99,7 @@ public class CellularAutomata2D : MonoBehaviour {
         int aliveNeighbourTiles = 0, deadNeighbourTiles = 0;
         for (int y = t_yPosition - 1; y <= t_yPosition + 1; y++) {
             for (int x = t_xPosition - 1; x <= t_xPosition + 1; x++) {
-                if (y == t_yPosition || x == t_xPosition) {
+                if (y == t_yPosition && x == t_xPosition) {
                     continue;
                 }
                 if (t_map[y, x]) {
