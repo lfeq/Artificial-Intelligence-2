@@ -71,7 +71,7 @@ public class CellularAutomata3D : MonoBehaviour {
     /// </summary>
     private IEnumerator GenerateMap() {
         while (true) {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2f);
             foreach (GameObject go in m_tiles) {
                 Destroy(go);
             }
