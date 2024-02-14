@@ -21,7 +21,7 @@ Pizzeria Madness is a game where you play as a pizza delivery driver competing a
 
 ### To play in browser:
 
-- Go to [itch.io]().
+- Go to [itch.io](https://oopolo.itch.io/pizzeria-madness).
 - Click "Play in browser".
 
 ## Controls:
