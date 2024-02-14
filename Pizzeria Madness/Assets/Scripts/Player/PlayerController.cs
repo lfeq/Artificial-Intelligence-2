@@ -1,66 +1,84 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the player's movement and interactions.
+/// </summary>
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour {
     [SerializeField] private AudioClip errorAudioClip;
     [SerializeField] private AudioClip successAudioClip;
 
-    private LevelManager levelManager;
-    private Node currentNode;
-    private List<Node> pathNodes = new List<Node>();
-    private LineRenderer lineRenderer;
-    private AudioSource audioSource;
+    private LevelManager m_levelManager;
+    private Node m_currentNode;
+    private List<Node> m_pathNodes = new List<Node>();
+    private LineRenderer m_lineRenderer;
+    private AudioSource m_audioSource;
 
     private void Start() {
-        levelManager = LevelManager.instance;
-        currentNode = levelManager.GetNodeAtIndex(0);
+        m_levelManager = LevelManager.s_instance;
+        m_currentNode = m_levelManager.GetNodeAtIndex(0);
         SetPositionToCurrentNode();
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.enabled = false;
-        audioSource = GetComponent<AudioSource>();
+        m_lineRenderer = GetComponent<LineRenderer>();
+        m_lineRenderer.enabled = false;
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     private void Update() {
-        if (levelManager.GetLevelState() == LevelManager.LevelState.ShowingNewTarget) {
-            lineRenderer.enabled = false;
-            pathNodes.Clear();
+        if (m_levelManager.GetLevelState() == LevelManager.LevelState.ShowingNewTarget) {
+            m_lineRenderer.enabled = false;
+            m_pathNodes.Clear();
             return;
         }
-        if (levelManager.GetLevelState() == LevelManager.LevelState.ShowingResults) {
+        if (m_levelManager.GetLevelState() == LevelManager.LevelState.ShowingResults) {
             ShowResults();
             return;
         }
         Movement();
     }
 
+    /// <summary>
+    /// Gets the nodes in the path.
+    /// </summary>
+    /// <returns>The nodes in the path.</returns>
     public List<Node> GetPathNodes() {
-        return pathNodes;
+        return m_pathNodes;
     }
 
+    /// <summary>
+    /// Gets the current node where the player is.
+    /// </summary>
+    /// <returns>The current node where the player is.</returns>
     public Node GetCurrentNode() {
-        return currentNode;
+        return m_currentNode;
     }
 
+    /// <summary>
+    /// Gets the distance of the path.
+    /// </summary>
+    /// <returns>The distance of the path.</returns>
     public int GetPathDistance() {
-        return pathNodes.Count + 1;
+        return m_pathNodes.Count + 1;
     }
 
+    /// <summary>
+    /// Handles the player's movement.
+    /// </summary>
     private void Movement() {
         Node newNode = null;
         bool keyPressed = false;
         if (Input.GetKeyUp(KeyCode.D)) {
-            newNode = currentNode.GetEastNode();
+            newNode = m_currentNode.GetEastNode();
             keyPressed = true;
         } else if (Input.GetKeyUp(KeyCode.A)) {
-            newNode = currentNode.GetWestNode();
+            newNode = m_currentNode.GetWestNode();
             keyPressed = true;
         } else if (Input.GetKeyUp(KeyCode.S)) {
-            newNode = currentNode.GetSouthNode();
+            newNode = m_currentNode.GetSouthNode();
             keyPressed = true;
         } else if (Input.GetKeyUp(KeyCode.W)) {
-            newNode = currentNode.GetNorthNode();
+            newNode = m_currentNode.GetNorthNode();
             keyPressed = true;
         }
         if (!keyPressed) {
@@ -70,37 +88,49 @@ public class PlayerController : MonoBehaviour {
             PlayErrorSound();
             return;
         }
-        currentNode = newNode;
+        m_currentNode = newNode;
         PlaySuccessSound();
         SetPositionToCurrentNode();
     }
 
+    /// <summary>
+    /// Sets the player's position to the current node.
+    /// </summary>
     private void SetPositionToCurrentNode() {
-        transform.position = currentNode.transform.position;
-        pathNodes.Add(currentNode);
-        if (currentNode == levelManager.GetTargetNode()) {
-            levelManager.ChangeLevelState(LevelManager.LevelState.ShowingResults);
+        transform.position = m_currentNode.transform.position;
+        m_pathNodes.Add(m_currentNode);
+        if (m_currentNode == m_levelManager.GetTargetNode()) {
+            m_levelManager.ChangeLevelState(LevelManager.LevelState.ShowingResults);
         }
     }
 
+    /// <summary>
+    /// Shows the results of the level.
+    /// </summary>
     private void ShowResults() {
-        lineRenderer.enabled = true;
-        lineRenderer.positionCount = pathNodes.Count + 1;
-        lineRenderer.SetPosition(0, levelManager.GetStartNode().transform.position + Vector3.up * 0.5f);
-        for (int i = 0; i < pathNodes.Count; i++) {
-            lineRenderer.SetPosition(i + 1, pathNodes[i].transform.position + Vector3.up * 0.5f);
+        m_lineRenderer.enabled = true;
+        m_lineRenderer.positionCount = m_pathNodes.Count + 1;
+        m_lineRenderer.SetPosition(0, m_levelManager.GetStartNode().transform.position + Vector3.up * 0.5f);
+        for (int i = 0; i < m_pathNodes.Count; i++) {
+            m_lineRenderer.SetPosition(i + 1, m_pathNodes[i].transform.position + Vector3.up * 0.5f);
         }
     }
 
+    /// <summary>
+    /// Plays the error sound.
+    /// </summary>
     private void PlayErrorSound() {
-        audioSource.clip = errorAudioClip;
-        audioSource.pitch = Random.Range(1f, 3f);
-        audioSource.Play();
+        m_audioSource.clip = errorAudioClip;
+        m_audioSource.pitch = Random.Range(1f, 3f);
+        m_audioSource.Play();
     }
 
+    /// <summary>
+    /// Plays the success sound.
+    /// </summary>
     private void PlaySuccessSound() {
-        audioSource.clip = successAudioClip;
-        audioSource.pitch = Random.Range(1f, 3f);
-        audioSource.Play();
+        m_audioSource.clip = successAudioClip;
+        m_audioSource.pitch = Random.Range(1f, 3f);
+        m_audioSource.Play();
     }
 }

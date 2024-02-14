@@ -1,9 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages the level state and nodes.
+/// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class LevelManager : MonoBehaviour {
-    public static LevelManager instance;
+
+    /// <summary>
+    /// Singleton instance of LevelManager.
+    /// </summary>
+    public static LevelManager s_instance;
 
     [SerializeField] private Node[] nodes;
     [SerializeField] private GameObject targetIndicatorPrefab;
@@ -26,7 +33,7 @@ public class LevelManager : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        s_instance = this;
     }
 
     private void Start() {
@@ -37,30 +44,59 @@ public class LevelManager : MonoBehaviour {
         ChangeLevelState(LevelState.ShowingNewTarget);
     }
 
+    /// <summary>
+    /// Gets the node at the specified index.
+    /// </summary>
+    /// <param name="t_index">Index of the node.</param>
+    /// <returns>The node at the specified index.</returns>
     public Node GetNodeAtIndex(int t_index) {
         return nodes[t_index];
     }
 
+    /// <summary>
+    /// Gets the current level state.
+    /// </summary>
+    /// <returns>The current level state.</returns>
     public LevelState GetLevelState() {
         return m_levelState;
     }
 
+    /// <summary>
+    /// Gets the target node.
+    /// </summary>
+    /// <returns>The target node.</returns>
     public Node GetTargetNode() {
         return m_targetNode;
     }
 
+    /// <summary>
+    /// Gets the m_timer for the level.
+    /// </summary>
+    /// <returns>The m_timer for the level.</returns>
     public float GetTimer() {
         return timer;
     }
 
+    /// <summary>
+    /// Gets the time for the next round.
+    /// </summary>
+    /// <returns>The time for the next round.</returns>
     public float GetRestartRoundTime() {
         return nextRoundTimeInSeconds;
     }
 
+    /// <summary>
+    /// Gets the start node.
+    /// </summary>
+    /// <returns>The start node.</returns>
     public Node GetStartNode() {
         return m_startNode;
     }
 
+    /// <summary>
+    /// Changes the level state.
+    /// </summary>
+    /// <param name="t_newState">The new level state.</param>
     public void ChangeLevelState(LevelState t_newState) {
         if (m_levelState == t_newState) {
             return;
@@ -83,6 +119,9 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sets a new target node.
+    /// </summary>
     private void SetNewTarget() {
         bool isPickingNewTarget = true;
         while (isPickingNewTarget) {
@@ -99,6 +138,9 @@ public class LevelManager : MonoBehaviour {
         }// First round
     }
 
+    /// <summary>
+    /// Shows the results of the level.
+    /// </summary>
     private void ShowResults() {
         List<Node> path = new List<Node>();
         if (GameManager.s_instance.GetDifficulty() == Difficulty.Medium) {
@@ -117,6 +159,9 @@ public class LevelManager : MonoBehaviour {
         result.ShowResult(m_lineRenderer.positionCount >= m_playerController.GetPathDistance(), m_playerController.GetPathDistance(), m_lineRenderer.positionCount);
     }
 
+    /// <summary>
+    /// Enum for level states
+    /// </summary>
     public enum LevelState {
         None,
         PlayerIsMoving,

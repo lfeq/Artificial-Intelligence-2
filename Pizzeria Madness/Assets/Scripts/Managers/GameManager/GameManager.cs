@@ -1,12 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manages the game state and difficulty.
+/// </summary>
 public class GameManager : MonoBehaviour {
+
+    /// <summary>
+    /// Singleton instance of GameManager.
+    /// </summary>
     public static GameManager s_instance;
 
     private GameState m_gameState;
     private Difficulty m_difficulty;
-    private string m_newLevel;
 
     private void Awake() {
         if (s_instance != null && s_instance != this) {
@@ -19,6 +25,10 @@ public class GameManager : MonoBehaviour {
         m_difficulty = Difficulty.None;
     }
 
+    /// <summary>
+    /// Changes the game state.
+    /// </summary>
+    /// <param name="t_newState">New game state.
     public void changeGameSate(GameState t_newState) {
         if (m_gameState == t_newState) {
             return;
@@ -52,10 +62,18 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Changes the game state in the editor.
+    /// </summary>
+    /// <param name="t_newState">New game state.
     public void changeGameStateInEditor(string t_newState) {
         changeGameSate((GameState)System.Enum.Parse(typeof(GameState), t_newState));
     }
 
+    /// <summary>
+    /// Changes the game difficulty.
+    /// </summary>
+    /// <param name="t_difficulty">New game difficulty.</param>
     public void changeDifficulty(Difficulty t_difficulty) {
         m_difficulty = t_difficulty;
         switch (m_difficulty) {
@@ -72,39 +90,62 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Changes the game difficulty in the editor.
+    /// </summary>
+    /// <param name="t_newState">New game difficulty.</param>
     public void changeDifficultyInEditor(string t_newState) {
         changeDifficulty((Difficulty)System.Enum.Parse(typeof(Difficulty), t_newState));
     }
 
+    /// <summary>
+    /// Gets the current game difficulty.
+    /// </summary>
+    /// <returns>Current game difficulty.</returns>
     public Difficulty GetDifficulty() {
         return m_difficulty;
     }
 
+    /// <summary>
+    /// Gets the current game state.
+    /// </summary>
+    /// <returns>Current game state.</returns>
     public GameState getGameState() {
         return m_gameState;
     }
 
-    public void setNewLevelName(string t_newLevel) {
-        m_newLevel = t_newLevel;
-    }
-
+    /// <summary>
+    /// Loads the main menu.
+    /// </summary>
     public void loadMenu() {
         SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Restarts the current level.
+    /// </summary>
     private void restartLevel() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    /// <summary>
+    /// Loads the level.
+    /// </summary>
     private void loadLevel() {
         SceneManager.LoadScene("SampleScene");
     }
 
+    /// <summary>
+    /// Quits the game.
+    /// </summary>
     private void quitGame() {
         Application.Quit();
     }
 }
 
+/// <summary>
+/// Enum for game states.
+/// </summary>
 public enum GameState {
     None,
     LoadMainMenu,
@@ -117,6 +158,9 @@ public enum GameState {
     QuitGame,
 }
 
+/// <summary>
+/// Enum for game difficulties.
+/// </summary>
 public enum Difficulty {
     None,
     Medium,
