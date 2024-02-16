@@ -57,7 +57,7 @@ public class CellularAutomata3D : MonoBehaviour {
                         continue;
                     }
                     if (Random.value <= cubeProbability) {
-                        m_map1[y, x, z] = Random.Range(1, m_maxLives);
+                        m_map1[y, x, z] = m_maxLives;
                     } else {
                         m_map1[y, x, z] = 0;
                     }
@@ -140,13 +140,16 @@ public class CellularAutomata3D : MonoBehaviour {
             }
         }
         if (aliveNeighbourTiles == m_survival) {
-            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
-                return Random.Range(1, m_maxLives); // Birth cell
-            }// Cell is dead
-            return t_map[t_yPosition, t_xPosition, t_zPosition]; // Keep alive
-        } else {
-            return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] == m_maxLives) {
+                return t_map[t_yPosition, t_xPosition, t_zPosition];
+            }
         }
+        if (aliveNeighbourTiles == m_birth) {
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
+                return m_maxLives; // Birth cell
+            }// Cell is dead
+        }
+        return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
     }
 
     /// <summary>
@@ -178,12 +181,15 @@ public class CellularAutomata3D : MonoBehaviour {
             }
         }
         if (aliveNeighbourTiles == m_survival) {
-            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
-                return Random.Range(1, m_maxLives); // Birth cell
-            }// Cell is dead
-            return t_map[t_yPosition, t_xPosition, t_zPosition]; // Keep alive
-        } else {
-            return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] == m_maxLives) {
+                return t_map[t_yPosition, t_xPosition, t_zPosition];
+            }
         }
+        if (aliveNeighbourTiles == m_birth) {
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
+                return m_maxLives; // Birth cell
+            }// Cell is dead
+        }
+        return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
     }
 }
