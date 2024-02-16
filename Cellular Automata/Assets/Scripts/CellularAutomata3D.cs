@@ -82,12 +82,12 @@ public class CellularAutomata3D : MonoBehaviour {
                     for (int z = 0; z < m_map1.GetLength(2); z++) {
                         Vector3 spawnPosition = new Vector3(x, -y, z);
                         GameObject tempTile = Instantiate(cubePrefab, spawnPosition, Quaternion.identity);
-                        if (m_map1[x, y, z] <= 0) {
+                        if (m_map1[y, x, z] <= 0) {
                             tempTile.SetActive(false);
                         } else {
                         }
                         m_tiles.Add(tempTile);
-                        tempTile.name = m_map1[x, y, z].ToString();
+                        tempTile.name = m_map1[y, x, z].ToString();
                     }
                 }
             }
@@ -139,12 +139,13 @@ public class CellularAutomata3D : MonoBehaviour {
                 }
             }
         }
-        if (aliveNeighbourTiles >= m_survival) {
-            return t_map[t_xPosition, t_yPosition, t_zPosition]; // Keep alive
-        } else if (deadNeighbourTiles == m_birth) {
-            return Random.Range(1, m_maxLives); // Birth cell
+        if (aliveNeighbourTiles == m_survival) {
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
+                return Random.Range(1, m_maxLives); // Birth cell
+            }// Cell is dead
+            return t_map[t_yPosition, t_xPosition, t_zPosition]; // Keep alive
         } else {
-            return t_map[t_xPosition, t_yPosition, t_zPosition] - 1;
+            return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
         }
     }
 
@@ -176,12 +177,13 @@ public class CellularAutomata3D : MonoBehaviour {
                 }
             }
         }
-        if (aliveNeighbourTiles >= m_survival) {
-            return t_map[t_xPosition, t_yPosition, t_zPosition]; // Keep alive
-        } else if (deadNeighbourTiles == m_birth) {
-            return Random.Range(1, m_maxLives); // Birth cell
+        if (aliveNeighbourTiles == m_survival) {
+            if (t_map[t_yPosition, t_xPosition, t_zPosition] <= 0) {
+                return Random.Range(1, m_maxLives); // Birth cell
+            }// Cell is dead
+            return t_map[t_yPosition, t_xPosition, t_zPosition]; // Keep alive
         } else {
-            return t_map[t_xPosition, t_yPosition, t_zPosition] - 1;
+            return t_map[t_yPosition, t_xPosition, t_zPosition] - 1;
         }
     }
 }
