@@ -1477,7 +1477,7 @@ MonoBehaviour:
   heightInput: {fileID: 1632839518}
   depthInput: {fileID: 135488150}
   countTypeDropdown: {fileID: 10466607}
-  cubeProbability: 0.01
+  cubeProbability: 0.1
 --- !u!4 &359976175
 Transform:
   m_ObjectHideFlags: 0

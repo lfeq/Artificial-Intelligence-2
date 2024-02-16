@@ -71,12 +71,11 @@ public class CellularAutomata3D : MonoBehaviour {
     /// </summary>
     private IEnumerator GenerateMap() {
         while (true) {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(.6f);
             foreach (GameObject go in m_tiles) {
                 Destroy(go);
             }
             m_tiles.Clear();
-            IterateNewMap();
             for (int y = 0; y < m_map1.GetLength(0); y++) {
                 for (int x = 0; x < m_map1.GetLength(1); x++) {
                     for (int z = 0; z < m_map1.GetLength(2); z++) {
@@ -84,13 +83,13 @@ public class CellularAutomata3D : MonoBehaviour {
                         GameObject tempTile = Instantiate(cubePrefab, spawnPosition, Quaternion.identity);
                         if (m_map1[y, x, z] <= 0) {
                             tempTile.SetActive(false);
-                        } else {
                         }
                         m_tiles.Add(tempTile);
                         tempTile.name = m_map1[y, x, z].ToString();
                     }
                 }
             }
+            IterateNewMap();
         }
     }
 
@@ -98,10 +97,10 @@ public class CellularAutomata3D : MonoBehaviour {
     /// Iterate and generate a new map based on the current map.
     /// </summary>
     private void IterateNewMap() {
-        int[,,] map2 = m_map1;
+        int[,,] map2 = (int[,,])m_map1.Clone();
         for (int y = 0; y < map2.GetLength(0); y++) {
             for (int x = 0; x < map2.GetLength(1); x++) {
-                for (int z = 0; z < m_map1.GetLength(2); z++) {
+                for (int z = 0; z < map2.GetLength(2); z++) {
                     if ((y == 0) || (y == m_height - 1) ||
                         (x == 0) || (x == m_width - 1) ||
                         (z == 0) || (z == m_depth - 1)) {
@@ -109,9 +108,9 @@ public class CellularAutomata3D : MonoBehaviour {
                         continue;
                     }
                     if (m_isUsingMoore) {
-                        map2[y, x, z] = CheckTilesMoore(map2, x, y, z);
+                        map2[y, x, z] = CheckTilesMoore(m_map1, x, y, z);
                     } else {
-                        map2[y, x, z] = CheckTilesNeumann(map2, x, y, z);
+                        map2[y, x, z] = CheckTilesNeumann(m_map1, x, y, z);
                     }
                 }
             }
@@ -131,9 +130,10 @@ public class CellularAutomata3D : MonoBehaviour {
                     if (y == t_yPosition && x == t_xPosition && z == t_zPosition) {
                         continue;
                     }
+                    // Solo cuentan si tienen el numero de vidas como vivas
                     if (t_map[y, x, z] <= 0) {
                         deadNeighbourTiles++;
-                    } else {
+                    } else if (t_map[y, x, z] == m_maxLives) {
                         aliveNeighbourTiles++;
                     }
                 }
