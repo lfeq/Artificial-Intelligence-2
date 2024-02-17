@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +19,6 @@ public class CellularAutomata2D : MonoBehaviour {
     [SerializeField] private Toggle isInstantToggle;
 
     private bool[,] m_map1; //false = alive, true = dead/painted
-    private List<GameObject> m_tiles = new List<GameObject>();
     private int m_overpopulationLimit = 3;
     private int m_iterations = 2;
     private bool m_isInstant;
@@ -28,12 +26,12 @@ public class CellularAutomata2D : MonoBehaviour {
     private int m_gridHeight = 50;
     private int m_neighbourCellsToBeAlive = 3;
     private int m_neighbourCellsToBeDead = 2;
+    private GameObject[,] m_tilesInWorld;
 
     /// <summary>
     /// Generates a new 2D cellular automata map based on specified parameters.
     /// </summary>
     public void GenerateAutomata() {
-        m_tiles.Clear();
         m_gridWidth = int.Parse(widthInput.text);
         m_gridHeight = int.Parse(heightInput.text);
         m_neighbourCellsToBeAlive = int.Parse(iterationsInput.text);
@@ -42,10 +40,26 @@ public class CellularAutomata2D : MonoBehaviour {
         m_overpopulationLimit = int.Parse(overpopulationInput.text);
         m_isInstant = !isInstantToggle.isOn;
         GenerateRandomMap();
+        drawTiles();
         if (m_isInstant) {
-            GenerateMapInSceneNoDelay();
+            generateMapInSceneNoDelay();
         } else {
-            StartCoroutine(GenerateMapInScene());
+            StartCoroutine(generateMapInScene());
+        }
+    }
+
+    private void drawTiles() {
+        m_tilesInWorld = new GameObject[m_gridWidth, m_gridHeight];
+        for (int i = 0; i < m_gridWidth; i++) {
+            for (int j = 0; j < m_gridHeight; j++) {
+                if (m_tilesInWorld[i, j] == null) {
+                    Vector2 spawnPos = new Vector2(i, -j);
+                    GameObject tile = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
+                    m_tilesInWorld[i, j] = tile;
+                }
+                GameObject tileObj = m_tilesInWorld[i, j];
+                tileObj.GetComponent<SpriteRenderer>().color = m_map1[i, j] ? paintedTileColor : Color.white;
+            }
         }
     }
 
@@ -53,115 +67,63 @@ public class CellularAutomata2D : MonoBehaviour {
     /// Generates a random initial map for the cellular automata based on specified parameters.
     /// </summary>
     private void GenerateRandomMap() {
-        m_map1 = new bool[m_gridHeight, m_gridWidth]; // y, x
-        for (int y = 0; y < m_map1.GetLength(0); y++) {
-            for (int x = 0; x < m_map1.GetLength(1); x++) {
-                if ((y == 0) || (y == m_gridHeight - 1) ||
-                    (x == 0) || (x == m_gridWidth - 1)) {
-                    m_map1[y, x] = true;
-                    continue;
-                }
-                if (Random.value >= cubeProbability) {
-                    m_map1[y, x] = false;
-                } else {
-                    m_map1[y, x] = true;
-                }
+        m_map1 = new bool[m_gridWidth, m_gridHeight]; // x, y
+        for (int y = 0; y < m_gridHeight; y++) {
+            for (int x = 0; x < m_gridWidth; x++) {
+                m_map1[y, x] = Random.value < cubeProbability; // True = wall, false = floor;
             }
         }
     }
 
-    /// <summary>
-    /// Iterates over the current map to generate the next iteration of the cellular automata.
-    /// </summary>
-    private void IterateNewMap() {
-        bool[,] map2 = m_map1;
-        for (int y = 0; y < map2.GetLength(0); y++) {
-            for (int x = 0; x < map2.GetLength(1); x++) {
-                if ((y == 0) || (y == m_gridHeight - 1) ||
-                    (x == 0) || (x == m_gridWidth - 1)) {
-                    map2[y, x] = true;
-                    continue;
-                }
-                map2[y, x] = Checktiles(map2, x, y);
+    private void iterateNewMap() {
+        bool[,] tempMap = new bool[m_gridWidth, m_gridHeight];
+        for (int y = 0; y < m_gridHeight; y++) {
+            for (int x = 0; x < m_gridWidth; x++) {
+                int num = numWallsAroundTile(x, y);
+                tempMap[x, y] = num >= 5;
             }
         }
-        m_map1 = map2;
+        m_map1 = tempMap;
     }
 
-    /// <summary>
-    /// Checks the neighboring tiles of a specific position in the map and determines its state.
-    /// </summary>
-    /// <param name="t_map">The map to be checked.</param>
-    /// <param name="t_xPosition">X-coordinate of the position.</param>
-    /// <param name="t_yPosition">Y-coordinate of the position.</param>
-    /// <returns>True if the tile should be dead, false if alive.</returns>
-    private bool Checktiles(bool[,] t_map, int t_xPosition, int t_yPosition) {
-        int aliveNeighbourTiles = 0, deadNeighbourTiles = 0;
+    private int numWallsAroundTile(int t_xPosition, int t_yPosition) {
+        int numWalls = 0; // Total number of walls around current tile
         for (int y = t_yPosition - 1; y <= t_yPosition + 1; y++) {
             for (int x = t_xPosition - 1; x <= t_xPosition + 1; x++) {
-                if (y == t_yPosition && x == t_xPosition) {
-                    continue;
-                }
-                if (t_map[y, x]) {
-                    deadNeighbourTiles++;
-                } else {
-                    aliveNeighbourTiles++;
+                if (isSolid(x, y)) {
+                    numWalls++;
                 }
             }
         }
-        if (aliveNeighbourTiles == m_neighbourCellsToBeAlive) {
-            return false;
-        } else if (deadNeighbourTiles == m_neighbourCellsToBeDead) {
+        return numWalls;
+    }
+
+    private bool isSolid(int x, int y) {
+        if (x < 0 || x >= m_gridWidth || y < 0 || y >= m_gridHeight) {
             return true;
-        } else if (m_overpopulationLimit == deadNeighbourTiles) {
-            return true;
-        } else {
-            return t_map[t_yPosition, t_xPosition];
         }
+        return m_map1[x, y];
     }
 
     /// <summary>
     /// Generates the cellular automata map and visualizes it in the scene with a delay between iterations.
     /// </summary>
     /// <returns>Coroutine for delayed map generation.</returns>
-    private IEnumerator GenerateMapInScene() {
+    private IEnumerator generateMapInScene() {
         for (int i = 0; i <= m_iterations; i++) {
-            for (int y = 0; y < m_map1.GetLength(0); y++) {
-                for (int x = 0; x < m_map1.GetLength(1); x++) {
-                    yield return new WaitForSeconds(0.005f);
-                    Vector2 spawnPosition = new Vector2(x, -y);
-                    GameObject tempTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity);
-                    SpriteRenderer spriteRenderer = tempTile.GetComponent<SpriteRenderer>();
-                    if (m_map1[x, y]) {
-                        spriteRenderer.color = paintedTileColor;
-                    } else {
-                        spriteRenderer.color = Color.white;
-                    }
-                }
-            }
-            IterateNewMap();
+            drawTiles();
+            yield return new WaitForSeconds(0.1f);
+            iterateNewMap();
         }
     }
 
     /// <summary>
     /// Generates the cellular automata map and visualizes it in the scene without any delay between iterations.
     /// </summary>
-    private void GenerateMapInSceneNoDelay() {
+    private void generateMapInSceneNoDelay() {
         for (int i = 0; i <= m_iterations; i++) {
-            for (int y = 0; y < m_map1.GetLength(0); y++) {
-                for (int x = 0; x < m_map1.GetLength(1); x++) {
-                    Vector2 spawnPosition = new Vector2(x, -y);
-                    GameObject tempTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity);
-                    m_tiles.Add(tempTile);
-                    SpriteRenderer spriteRenderer = tempTile.GetComponent<SpriteRenderer>();
-                    if (m_map1[x, y]) {
-                        spriteRenderer.color = paintedTileColor;
-                    } else {
-                        spriteRenderer.color = Color.white;
-                    }
-                }
-            }
-            IterateNewMap();
+            drawTiles();
+            iterateNewMap();
         }
     }
 }

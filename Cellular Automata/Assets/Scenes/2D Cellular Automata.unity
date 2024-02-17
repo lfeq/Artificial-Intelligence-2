@@ -3557,14 +3557,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 3715654269288608409, guid: c38d2efc25fb9604cbadc685b8b456a6, type: 3}
-  paintedTileColor: {r: 1, g: 0, b: 0, a: 1}
-  gridWidth: 50
-  gridHeight: 50
-  neighbourCellsToBeAlive: 5
-  neighbourCellsToBeDead: 2
-  cubeProbability: 0.5
-  iterations: 1
-  isInstant: 0
+  paintedTileColor: {r: 0, g: 0, b: 0, a: 1}
+  cubeProbability: 0.45
   widthInput: {fileID: 47862214}
   heightInput: {fileID: 1293762890}
   iterationsInput: {fileID: 1964948152}
