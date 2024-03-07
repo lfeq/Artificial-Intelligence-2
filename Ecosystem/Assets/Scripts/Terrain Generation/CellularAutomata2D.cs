@@ -8,17 +8,12 @@ using UnityEngine.UI;
 /// </summary>
 public class CellularAutomata2D : MonoBehaviour {
     [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private Color paintedTileColor = Color.red;
     [SerializeField, Range(0.01f, 1)] private float cubeProbability = 0.5f;
     [SerializeField] private int m_iterations = 5;
     [SerializeField] private int m_gridWidth = 50;
     [SerializeField] private int m_gridHeight = 50;
 
-    private bool[,] m_map1; //false = alive, true = dead/painted
-    private int m_overpopulationLimit = 3;
-    private bool m_isInstant = true;
-    private int m_neighbourCellsToBeAlive = 3;
-    private int m_neighbourCellsToBeDead = 2;
+    private bool[,] m_map1;
     private GameObject[,] m_tilesInWorld;
 
     private void Start() {

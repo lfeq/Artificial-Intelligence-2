@@ -10,10 +10,6 @@ public class TileController : MonoBehaviour {
     private TileType tileType;
     private int earthTilesAroundTile;
 
-    // Start is called before the first frame update
-    private void Start() {
-    }
-
     public void setTileType(TileType t_tileType) {
         tileType = t_tileType;
     }
