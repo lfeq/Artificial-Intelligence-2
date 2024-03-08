@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//TODO: Add genre, Thirst and Reproduction needs
 [RequireComponent(typeof(Rigidbody))]
 public class BaseAgent : MonoBehaviour {
 
@@ -21,6 +22,10 @@ public class BaseAgent : MonoBehaviour {
     [SerializeField] private float circleDistance = 5, circleRadius = 1;
     [SerializeField, Header("Collision Avoidance")] private float collisionObstacleAvoidanceRadius = 5;
     [SerializeField] private float collisionAvoidanceForce = 5;
+    [SerializeField, Header("Hunger")] private float maxHunger = 100;
+    [SerializeField] private float hungerTreshold = 50; //Treshold when agent starts to starve
+    [SerializeField] private float hungerRatePerSecond = 0.3f;
+    [SerializeField] private float eatDistance = 2f;
 
     #endregion Serializable variables
 
@@ -135,6 +140,22 @@ public class BaseAgent : MonoBehaviour {
 
     public float getCollisionAvoidanceForce() {
         return collisionAvoidanceForce;
+    }
+
+    public float getMaxHunger() {
+        return maxHunger;
+    }
+
+    public float getHungerTreshold() {
+        return hungerTreshold;
+    }
+
+    public float getHungerRatePerSecond() {
+        return hungerRatePerSecond;
+    }
+
+    public float getEatDistance() {
+        return eatDistance;
     }
 
     #endregion Public functions
