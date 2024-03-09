@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - Bush
+  - Tile
   layers:
   - Default
   - TransparentFX

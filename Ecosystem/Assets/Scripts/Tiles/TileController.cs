@@ -30,6 +30,10 @@ public class TileController : MonoBehaviour {
         tileType = t_tileType;
     }
 
+    public TileType getTileType() {
+        return tileType;
+    }
+
     public void setEarthTileAroundTile(int t_earthTilesAroundTile) {
         earthTilesAroundTile = t_earthTilesAroundTile;
     }

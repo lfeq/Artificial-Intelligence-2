@@ -34,7 +34,7 @@ public class MovementManager : MonoBehaviour {
             case MovementState.Evading:
                 break;
             case MovementState.Arriving:
-                steeringForce += SteeringBehaviours.seek(agent, agent.getTargetTranform().position, true);
+                steeringForce += SteeringBehaviours.seek(agent, agent.target.position, true);
                 break;
             case MovementState.Wandering:
                 steeringForce += SteeringBehaviours.wander(agent);
