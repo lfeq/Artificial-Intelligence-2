@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
 public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate {
-    [SerializeField] private GameObject babyPrefab;
+    public GameObject babyPrefab;
 
     public float currentHunger;
     public float currentThirst;
@@ -22,6 +22,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
+        babyPrefab = LevelManager.instance.getRabbitPrefab();
     }
 
     private void Update() {
@@ -91,9 +92,10 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     public void lookForWater() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedWaterTiles = new List<GameObject>();
+        TileController tileController;
         foreach (Collider col in percibed) {
-            if (col.CompareTag("Tile")) {
-                if (col.GetComponent<TileController>().getTileType() == TileType.Water) {
+            if (col.CompareTag("Obstacle")) {
+                if (col.TryGetComponent<TileController>(out tileController) && tileController.getTileType() == TileType.Water) {
                     percibedWaterTiles.Add(col.gameObject);
                 }
             }
@@ -237,14 +239,20 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
 
     private void giveBirth() {
         int numBabies = Random.Range(agent.minBabies, agent.maxBabies);
-        BaseAgent father = closestMate.GetComponent<BaseAgent>();
-        for (int i = 0; i < numBabies; i++) {
-            BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
-            BaseAgent genes = GeneticsManager.reproduce(father, agent);
-            baby.init(genes);
-        }
+        //BaseAgent father = closestMate.GetComponent<BaseAgent>();
+        //for (int i = 0; i < numBabies; i++) {
+        //    BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
+        //    //BaseAgentData genes = GeneticsManager.reproduce(father, agent);
+        //    BaseAgentData genes = GeneticsManager.reproduce(agent, agent);
+        //    baby.init(genes);
+        //}
+        BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
+        //BaseAgentData genes = GeneticsManager.reproduce(father, agent);
+        BaseAgentData genes = GeneticsManager.reproduce(agent, agent);
+        baby.init(genes);
         closestMate = null;
         agent.isPregnant = false;
+        currentGestation = 0f;
     }
 
     private enum RabbitState {

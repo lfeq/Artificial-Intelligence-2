@@ -1,8 +1,7 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+// TODO: Poner limite al mapa
 /// <summary>
 /// Manages the generation and visualization of 2D cellular automata maps.
 /// </summary>
@@ -36,6 +35,7 @@ public class CellularAutomata2D : MonoBehaviour {
                 if (m_tilesInWorld[i, j] == null) {
                     Vector3 spawnPos = new Vector3(i, 0, j);
                     GameObject tile = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
+                    tile.transform.parent = transform;
                     m_tilesInWorld[i, j] = tile;
                 }
                 GameObject tileObj = m_tilesInWorld[i, j];

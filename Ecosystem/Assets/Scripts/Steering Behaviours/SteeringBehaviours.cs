@@ -96,8 +96,8 @@ public class SteeringBehaviours {
         Vector3 ahead = agentPosition + (t_BaseAgent.getCurrentVelocity().normalized * dynamicLenght);
         Vector3 ahead2 = agentPosition + (t_BaseAgent.getCurrentVelocity().normalized * dynamicLenght * 0.5f);
         Vector3 avoidance = Vector3.zero;
-        DebugExtension.DebugArrow(agentPosition, ahead, Color.green);
-        DebugExtension.DebugArrow(agentPosition, ahead2, Color.red);
+        //DebugExtension.DebugArrow(agentPosition, ahead, Color.green);
+        //DebugExtension.DebugArrow(agentPosition, ahead2, Color.red);
         GameObject mostThreateningObstacle = findMostThreateningObstacle(ahead, ahead2, t_BaseAgent.collisionObstacleAvoidanceRadius, agentPosition);
         if (mostThreateningObstacle == null) {
             return avoidance;
@@ -106,8 +106,8 @@ public class SteeringBehaviours {
         avoidance.z = ahead.z - mostThreateningObstacle.transform.position.z;
         avoidance.Normalize();
         avoidance *= t_BaseAgent.collisionAvoidanceForce;
-        DebugExtension.DebugArrow(agentPosition, avoidance, Color.yellow);
-        return avoidance;
+        //DebugExtension.DebugArrow(agentPosition, avoidance, Color.yellow);
+        return Vector3.ClampMagnitude((t_BaseAgent.getCurrentVelocity() + avoidance), t_BaseAgent.maxSpeed);
     }
 
     #endregion public functions
@@ -148,6 +148,9 @@ public class SteeringBehaviours {
         Collider[] hitColliders = Physics.OverlapSphere(t_ahead, t_radius);
         float maxDistance = float.MaxValue;
         foreach (var hitCollider in hitColliders) {
+            if (!hitCollider.CompareTag("Obstacle")) {
+                continue;
+            }
             float distanceToObstacle = Vector3.Distance(t_agentPosition, hitCollider.transform.position);
             if (distanceToObstacle < maxDistance) {
                 maxDistance = distanceToObstacle;
@@ -156,6 +159,9 @@ public class SteeringBehaviours {
         }
         hitColliders = Physics.OverlapSphere(t_ahead2, t_radius);
         foreach (var hitCollider in hitColliders) {
+            if (!hitCollider.CompareTag("Obstacle")) {
+                continue;
+            }
             float distanceToObstacle = Vector3.Distance(t_agentPosition, hitCollider.transform.position);
             if (distanceToObstacle < maxDistance) {
                 maxDistance = distanceToObstacle;

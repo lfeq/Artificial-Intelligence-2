@@ -68,6 +68,7 @@ public class TileController : MonoBehaviour {
         setColor(waterColor);
         setTree(false);
         setBush(false);
+        gameObject.tag = "Obstacle";
     }
 
     private void setColor(Color t_color) {

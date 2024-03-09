@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GeneticsManager {
 
-    public static BaseAgent reproduce(BaseAgent t_father, BaseAgent t_mother) {
+    public static BaseAgentData reproduce(BaseAgent t_father, BaseAgent t_mother) {
         float mutationProbability = 0.05f;
-        BaseAgent sonAgent;
+        BaseAgentData sonAgent = new BaseAgentData();
         // 50/50 chance male or female
-        sonAgent.genre = Random.value < 0.5f ? Genre.Male : Genre.Male; // 50/50 chance male or female
+        sonAgent.genre = Random.value < 0.5f ? Genre.Male : Genre.Female; // 50/50 chance male or female
         // Set son maxSpeed
         sonAgent.maxSpeed = Random.value < 0.5f ? t_father.maxSpeed : t_mother.maxSpeed;
         sonAgent.maxSpeed = Random.value < mutationProbability ? t_father.maxSpeed * Random.Range(0.1f, 2f) : t_mother.maxSpeed * Random.Range(0.1f, 2f);

@@ -532,34 +532,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aafc99279363be499bc128d313deb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wanderAngle: 0.5
-  genre: 0
-  maxSpeed: 1
-  maxSteeringForce: 5
-  slowingRadius: 5
-  target: {fileID: 0}
-  eyeRadius: 5
-  eyePosition: {fileID: 39218009664294098}
-  angleChange: 0.3
-  circleDistance: 1
-  circleRadius: 1
-  collisionObstacleAvoidanceRadius: 5
-  collisionAvoidanceForce: 2
-  maxHunger: 100
-  hungerTreshold: 50
-  hungerRatePerSecond: 0.2
-  eatDistance: 2
-  maxThirst: 100
-  thirstTreshold: 60
-  thirstRatePerSecond: 0.7
-  drinkingDistance: 2
-  gestationTimeInSeconds: 1000
-  reproductionDistance: 2
-  isPregnant: 0
-  attractiveness: 50
-  reproductionTreshold: 50
-  maxBabies: 5
-  minBabies: 1
+  agentData:
+    wanderAngle: 0.5
+    genre: 0
+    maxSpeed: 1
+    maxSteeringForce: 3
+    slowingRadius: 5
+    target: {fileID: 0}
+    eyeRadius: 3
+    eyePosition: {fileID: 39218009664294098}
+    angleChange: 0.4
+    circleDistance: 1
+    circleRadius: 1
+    collisionObstacleAvoidanceRadius: 0.5
+    collisionAvoidanceForce: 5
+    maxHunger: 100
+    hungerTreshold: 50
+    hungerRatePerSecond: 0.3
+    eatDistance: 2
+    maxThirst: 100
+    thirstTreshold: 50
+    thirstRatePerSecond: 0.3
+    drinkingDistance: 2
+    gestationTimeInSeconds: 1000
+    reproductionDistance: 2
+    isPregnant: 0
+    attractiveness: 50
+    reproductionTreshold: 50
+    maxBabies: 5
+    minBabies: 1
 --- !u!114 &7509004474085897303
 MonoBehaviour:
   m_ObjectHideFlags: 0
