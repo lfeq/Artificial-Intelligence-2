@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//TODO: Agregar edad
 [Serializable]
 public class BaseAgentData {
     [HideInInspector] public float wanderAngle = 0.5f;
@@ -30,4 +31,7 @@ public class BaseAgentData {
     public float reproductionTreshold = 50;
     public int maxBabies = 5;
     public int minBabies = 1;
+    [Header("Age")] public float averageDeathAge = 7f;
+    public float ageRatePerSecond = 1f;
+    public float reproductionAge = 5f;
 }

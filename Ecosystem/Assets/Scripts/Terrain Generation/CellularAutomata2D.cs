@@ -41,6 +41,9 @@ public class CellularAutomata2D : MonoBehaviour {
                 GameObject tileObj = m_tilesInWorld[i, j];
                 TileController tileController = tileObj.GetComponent<TileController>();
                 TileType tileType = m_map1[i, j] ? TileType.Grass : TileType.Water;
+                if (i == 0 || i == m_gridWidth - 1 || j == 0 || j == m_gridHeight - 1) {
+                    tileType = TileType.Border;
+                }
                 tileController.setTileType(tileType);
                 int wallsArround = numWallsAroundTile(i, j);
                 if (tileType == TileType.Grass && wallsArround != 9) {

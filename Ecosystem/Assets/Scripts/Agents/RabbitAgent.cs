@@ -1,38 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Add Reproduction
+// TODO: Add pray behaviour
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
-public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate {
-    public GameObject babyPrefab;
-
+public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie {
+    private GameObject babyPrefab;
     public float currentHunger;
     public float currentThirst;
     public float currentGestation;
     public float currentReproductionUrge;
+    public float currentAge;
     private BaseAgent agent;
     private MovementManager movementManager;
-    private RabbitState rabbitState;
+    [SerializeField] private RabbitState rabbitState;
     private GameObject closestFood;
     private GameObject closestWater;
     private GameObject closestMate;
+    private BaseAgentData fatherBaseAgentData;
 
     private void Start() {
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
         babyPrefab = LevelManager.instance.getRabbitPrefab();
+        currentAge = 0;
     }
 
     private void Update() {
         reduceVitals();
+        checkVitals();
         decisionManager();
         act();
     }
 
     public void eat() {
         currentHunger = 0;
+        closestFood.SetActive(false);
         closestFood = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
@@ -42,28 +46,44 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     public void reduceVitals() {
         currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
         currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
+        currentAge += Time.deltaTime * agent.ageRatePerSecond;
         if (agent.isPregnant) {
             currentGestation += Time.deltaTime;
-            if (currentGestation >= agent.gestationTimeInSeconds) {
-                giveBirth();
-            }
         }
-        if (agent.genre == Genre.Female && !agent.isPregnant) {
-            currentReproductionUrge += Time.deltaTime; // TODO: Hacer variable con la edad
+        if (agent.genre == Genre.Female && !agent.isPregnant && agent.reproductionAge <= currentAge) {
+            currentReproductionUrge += Time.deltaTime * currentAge;
         }
+    }
+
+    public void checkVitals() {
+        if (currentGestation >= agent.gestationTimeInSeconds) {
+            giveBirth();
+        }
+        if (currentHunger >= agent.maxHunger ||
+            currentThirst >= agent.maxThirst ||
+            currentAge >= agent.averageDeathAge) {
+            die();
+        }
+    }
+
+    public void die() {
+        Destroy(gameObject);
     }
 
     public void lookForFood() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedFoods = new List<GameObject>();
         foreach (Collider col in percibed) {
-            if (col.CompareTag("Bush")) {
+            if (col.CompareTag("Bush") && col.gameObject.activeSelf) {
                 percibedFoods.Add(col.gameObject);
             }
         }
         float closestFoodDistance = float.MaxValue;
         GameObject tempClosestFood = null;
         foreach (GameObject food in percibedFoods) {
+            if (!food.activeSelf) {
+                continue;
+            }
             float distance = Vector3.Distance(transform.position, food.transform.position);
             if (distance < closestFoodDistance) {
                 tempClosestFood = food;
@@ -71,6 +91,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             }
         }
         if (tempClosestFood == null) {
+            movementManager.setMovementState(MovementState.Wandering);
             return;
         }
         closestFood = tempClosestFood;
@@ -80,6 +101,10 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     public void moveTowardFood() {
         if (closestFood == null) {
             lookForFood();
+            return;
+        }
+        if (!closestFood.activeSelf) {
+            closestFood = null;
             return;
         }
         if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance) {
@@ -110,14 +135,15 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             }
         }
         if (tempClosestWater == null) {
+            movementManager.setMovementState(MovementState.Wandering);
             return;
         }
         closestWater = tempClosestWater;
-        agent.target = closestWater.transform;
+        agent.target = tempClosestWater.transform;
     }
 
     public void moveTowardsWater() {
-        if (closestWater == null) {
+        if (closestWater == null || agent.target == null) {
             lookForWater();
             return;
         }
@@ -149,6 +175,10 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         float attractiviestMate = 0f;
         GameObject tempClosestMate = null;
         foreach (GameObject mate in percibedPossibleMates) {
+            BaseAgent mateBaseAgent = mate.GetComponent<BaseAgent>();
+            if (mate.GetComponent<RabbitAgent>().currentAge <= mateBaseAgent.reproductionAge) {
+                continue;
+            }
             float tempAttractiveness = mate.GetComponent<BaseAgent>().attractiveness;
             if (tempAttractiveness > attractiviestMate) {
                 tempClosestMate = mate;
@@ -156,11 +186,13 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             }
         }
         if (tempClosestMate == null) {
+            movementManager.setMovementState(MovementState.Wandering);
             return;
         }
         closestMate = tempClosestMate;
         agent.target = closestMate.transform;
         closestMate.GetComponent<RabbitAgent>().waitForMate();
+        rabbitState = RabbitState.Reproduce;
     }
 
     public void moveTorwardsMate() {
@@ -176,6 +208,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             agent.isPregnant = true;
             currentReproductionUrge = 0;
             rabbitState = RabbitState.None;
+            fatherBaseAgentData = closestMate.GetComponent<BaseAgent>().getBaseAgentData();
             closestMate.GetComponent<RabbitAgent>().resetState();
             return;
         }
@@ -195,12 +228,12 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         if (isActing()) {
             return;
         } // Rabbit is performing an action
-        if (currentReproductionUrge >= agent.reproductionTreshold) {
-            rabbitState = RabbitState.Reproduce;
-        } else if (currentHunger >= agent.hungerTreshold) {
+        if (currentHunger >= agent.hungerTreshold) {
             rabbitState = RabbitState.Hungry;
         } else if (currentThirst >= agent.thirstTreshold) {
             rabbitState = RabbitState.Thirsty;
+        } else if (currentReproductionUrge >= agent.reproductionTreshold) {
+            rabbitState = RabbitState.LookingForMate;
         } else {
             rabbitState = RabbitState.Wandering;
         }
@@ -234,22 +267,19 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             case RabbitState.Reproduce:
                 moveTorwardsMate();
                 break;
+            case RabbitState.LookingForMate:
+                lookForMate();
+                break;
         }
     }
 
     private void giveBirth() {
         int numBabies = Random.Range(agent.minBabies, agent.maxBabies);
-        //BaseAgent father = closestMate.GetComponent<BaseAgent>();
-        //for (int i = 0; i < numBabies; i++) {
-        //    BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
-        //    //BaseAgentData genes = GeneticsManager.reproduce(father, agent);
-        //    BaseAgentData genes = GeneticsManager.reproduce(agent, agent);
-        //    baby.init(genes);
-        //}
-        BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
-        //BaseAgentData genes = GeneticsManager.reproduce(father, agent);
-        BaseAgentData genes = GeneticsManager.reproduce(agent, agent);
-        baby.init(genes);
+        for (int i = 0; i < numBabies; i++) {
+            BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
+            BaseAgentData genes = GeneticsManager.reproduce(fatherBaseAgentData, agent.getBaseAgentData());
+            baby.init(genes);
+        }
         closestMate = null;
         agent.isPregnant = false;
         currentGestation = 0f;
@@ -263,5 +293,6 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         Thirsty,
         Drinking,
         Reproduce,
+        LookingForMate,
     }
 }

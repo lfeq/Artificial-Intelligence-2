@@ -10,6 +10,7 @@ public class TileController : MonoBehaviour {
     [SerializeField, Header("Bush")] private GameObject bushPrefab;
     [SerializeField, Range(0, 1)] private float bushProbability = 0.5f;
     [SerializeField] private float bushSpawnTimeInSeconds = 30;
+    [SerializeField, Header("Rock")] private GameObject rockPrefab;
 
     private TileType tileType;
     private int earthTilesAroundTile;
@@ -49,25 +50,42 @@ public class TileController : MonoBehaviour {
             case TileType.Water:
                 setUpWater();
                 break;
+            case TileType.Border:
+                setUpBorder();
+                break;
         }
+    }
+
+    private void setUpBorder() {
+        if (earthTilesAroundTile != 9) {
+            setColor(earthColor);
+        } else {
+            setColor(grassColor);
+        }
+        setTree(false);
+        setBush(false);
+        setRock(true);
     }
 
     private void setUpEarth() {
         setColor(earthColor);
         setTree(false);
         setBush(false);
+        setRock(false);
     }
 
     private void setUpGrass() {
         setColor(grassColor);
         setTree(Random.value < treeProbability);
         setBush(Random.value < bushProbability);
+        setRock(false);
     }
 
     private void setUpWater() {
         setColor(waterColor);
         setTree(false);
         setBush(false);
+        setRock(false);
         gameObject.tag = "Obstacle";
     }
 
@@ -86,6 +104,10 @@ public class TileController : MonoBehaviour {
         bushPrefab.SetActive(t_isBushActive);
     }
 
+    private void setRock(bool t_isRockActive) {
+        rockPrefab.SetActive(t_isRockActive);
+    }
+
     private void growBush() {
         if (bushPrefab.activeSelf || treePrefab.activeSelf) {
             return;
@@ -102,5 +124,6 @@ public enum TileType {
     None,
     Grass,
     Earth,
-    Water
+    Water,
+    Border
 }

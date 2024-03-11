@@ -1,6 +1,5 @@
 using UnityEngine;
 
-//TODO: Add Reproduction
 [RequireComponent(typeof(Rigidbody))]
 public class BaseAgent : MonoBehaviour {
     [SerializeField] private BaseAgentData agentData;
@@ -35,6 +34,9 @@ public class BaseAgent : MonoBehaviour {
         thirstTreshold = t_baseAgent.thirstTreshold;
         thirstRatePerSecond = t_baseAgent.thirstRatePerSecond;
         attractiveness = t_baseAgent.attractiveness;
+        angleChange = t_baseAgent.angleChange;
+        circleDistance = t_baseAgent.circleDistance;
+        circleRadius = t_baseAgent.circleRadius;
     }
 
     public Vector3 getCurrentVelocity() {
@@ -188,6 +190,25 @@ public class BaseAgent : MonoBehaviour {
     public int minBabies {
         get { return agentData.minBabies; }
         set { agentData.minBabies = value; }
+    }
+
+    public float averageDeathAge {
+        get { return agentData.averageDeathAge; }
+        set { agentData.averageDeathAge = value; }
+    }
+
+    public float ageRatePerSecond {
+        get { return agentData.ageRatePerSecond; }
+        set { agentData.ageRatePerSecond = value; }
+    }
+
+    public float reproductionAge {
+        get { return agentData.reproductionAge; }
+        set { agentData.reproductionAge = value; }
+    }
+
+    public BaseAgentData getBaseAgentData() {
+        return agentData;
     }
 }
 
