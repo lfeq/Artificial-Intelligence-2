@@ -45,7 +45,9 @@ public class MovementManager : MonoBehaviour {
                 steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
         }
-        rb.velocity = steeringForce;
+        steeringForce = Vector3.ClampMagnitude(steeringForce, agent.maxSteeringForce);
+        steeringForce = steeringForce / agent.getMass();
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity + steeringForce, agent.maxSpeed);
     }
 
     private void lookAtDirection() {

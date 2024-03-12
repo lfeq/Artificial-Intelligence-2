@@ -545,8 +545,8 @@ MonoBehaviour:
     angleChange: 0.5
     circleDistance: 2
     circleRadius: 2
-    collisionObstacleAvoidanceRadius: 2
-    collisionAvoidanceForce: 10
+    collisionObstacleAvoidanceRadius: 1
+    collisionAvoidanceForce: 2
     maxHunger: 50
     hungerTreshold: 25
     hungerRatePerSecond: 6

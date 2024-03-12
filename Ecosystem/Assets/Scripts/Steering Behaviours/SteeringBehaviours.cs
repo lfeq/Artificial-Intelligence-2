@@ -85,8 +85,8 @@ public class SteeringBehaviours {
         t_BaseAgent.wanderAngle += (Random.value * angleChange) - (angleChange * 0.5f);
         Vector3 wanderForce = circleCenter + displacement;
         wanderForce = Vector3.ClampMagnitude(wanderForce, t_BaseAgent.maxSpeed);
-        wanderForce /= t_BaseAgent.getMass();
-        return Vector3.ClampMagnitude((t_BaseAgent.getCurrentVelocity() + wanderForce), t_BaseAgent.maxSpeed);
+        //DebugExtension.DebugArrow(t_BaseAgent.transform.position, wanderForce, Color.green);
+        return wanderForce;
     }
 
     public static Vector3 collisionAvoidance(BaseAgent t_BaseAgent) {
@@ -103,7 +103,8 @@ public class SteeringBehaviours {
         avoidance.z = ahead.z - mostThreateningObstacle.transform.position.z;
         avoidance.Normalize();
         avoidance *= t_BaseAgent.collisionAvoidanceForce;
-        return Vector3.ClampMagnitude((t_BaseAgent.getCurrentVelocity() + avoidance), t_BaseAgent.maxSpeed);
+        //DebugExtension.DebugArrow(t_BaseAgent.transform.position, avoidance, Color.red);
+        return avoidance;
     }
 
     #endregion public functions
