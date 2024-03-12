@@ -9,7 +9,8 @@ public class BaseAgentData {
     [Header("Movement")] public float maxSpeed = 5;
     public float maxSteeringForce = 5;
     public float slowingRadius = 5;
-    public Transform target;
+    [Header("Target")] public Transform target;
+    public BaseAgent targetAgent;
     [Header("Sight")] public float eyeRadius = 3;
     public Transform eyePosition;
     [Header("Wander")] public float angleChange = 5;

@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -15,6 +16,7 @@ public class MovementManager : MonoBehaviour {
 
     private void FixedUpdate() {
         move();
+        lookAtDirection();
     }
 
     public void setMovementState(MovementState t_movementState) {
@@ -30,12 +32,13 @@ public class MovementManager : MonoBehaviour {
             case MovementState.None:
                 break;
             case MovementState.Pursuing:
+                steeringForce += SteeringBehaviours.pursuit(agent, agent.targetAgent);
                 break;
             case MovementState.Evading:
+                steeringForce += SteeringBehaviours.evade(agent, agent.targetAgent);
                 break;
             case MovementState.Arriving:
                 steeringForce += SteeringBehaviours.seek(agent, agent.target.position, false);
-                //steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
             case MovementState.Wandering:
                 steeringForce += SteeringBehaviours.wander(agent);
@@ -43,6 +46,11 @@ public class MovementManager : MonoBehaviour {
                 break;
         }
         rb.velocity = steeringForce;
+    }
+
+    private void lookAtDirection() {
+        Quaternion desiredRotation = Quaternion.LookRotation(rb.velocity);
+        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime);
     }
 }
 

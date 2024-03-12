@@ -5,6 +5,7 @@ public class LevelManager : MonoBehaviour {
     public static LevelManager instance;
 
     [SerializeField] private GameObject rabbitPrefab;
+    [SerializeField] private GameObject foxPrefab;
 
     private void Awake() {
         if (FindObjectOfType<LevelManager>() != null &&
@@ -17,5 +18,9 @@ public class LevelManager : MonoBehaviour {
 
     public GameObject getRabbitPrefab() {
         return rabbitPrefab;
+    }
+
+    public GameObject getFoxPrefab() {
+        return foxPrefab;
     }
 }

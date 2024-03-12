@@ -341,8 +341,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 299252513381050704, guid: 4f6c6a73c0a8ba949a7bc98ce5141093, type: 3}
   cubeProbability: 0.55
   m_iterations: 3
-  m_gridWidth: 40
-  m_gridHeight: 40
+  m_gridWidth: 50
+  m_gridHeight: 50
 --- !u!4 &1006452463
 Transform:
   m_ObjectHideFlags: 0
@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rabbitPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
+  foxPrefab: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
 --- !u!4 &2138869290
 Transform:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -96,8 +95,6 @@ public class SteeringBehaviours {
         Vector3 ahead = agentPosition + (t_BaseAgent.getCurrentVelocity().normalized * dynamicLenght);
         Vector3 ahead2 = agentPosition + (t_BaseAgent.getCurrentVelocity().normalized * dynamicLenght * 0.5f);
         Vector3 avoidance = Vector3.zero;
-        //DebugExtension.DebugArrow(agentPosition, ahead, Color.green);
-        //DebugExtension.DebugArrow(agentPosition, ahead2, Color.red);
         GameObject mostThreateningObstacle = findMostThreateningObstacle(ahead, ahead2, t_BaseAgent.collisionObstacleAvoidanceRadius, agentPosition);
         if (mostThreateningObstacle == null) {
             return avoidance;
@@ -106,7 +103,6 @@ public class SteeringBehaviours {
         avoidance.z = ahead.z - mostThreateningObstacle.transform.position.z;
         avoidance.Normalize();
         avoidance *= t_BaseAgent.collisionAvoidanceForce;
-        //DebugExtension.DebugArrow(agentPosition, avoidance, Color.yellow);
         return Vector3.ClampMagnitude((t_BaseAgent.getCurrentVelocity() + avoidance), t_BaseAgent.maxSpeed);
     }
 

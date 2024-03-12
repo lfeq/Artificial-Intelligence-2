@@ -77,6 +77,11 @@ public class BaseAgent : MonoBehaviour {
         set { agentData.target = value; }
     }
 
+    public BaseAgent targetAgent {
+        get { return agentData.targetAgent; }
+        set { agentData.targetAgent = value; }
+    }
+
     public float eyeRadius {
         get { return agentData.eyeRadius; }
         set { agentData.eyeRadius = value; }

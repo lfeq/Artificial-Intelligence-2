@@ -1670,20 +1670,21 @@ MonoBehaviour:
     maxSteeringForce: 3
     slowingRadius: 5
     target: {fileID: 0}
+    targetAgent: {fileID: 0}
     eyeRadius: 3
     eyePosition: {fileID: 1234684011694395183}
     angleChange: 0.2
     circleDistance: 2
     circleRadius: 1
-    collisionObstacleAvoidanceRadius: 0.5
-    collisionAvoidanceForce: 5
-    maxHunger: 100
-    hungerTreshold: 50
-    hungerRatePerSecond: 0.3
-    eatDistance: 2
-    maxThirst: 100
-    thirstTreshold: 50
-    thirstRatePerSecond: 0.3
+    collisionObstacleAvoidanceRadius: 2
+    collisionAvoidanceForce: 10
+    maxHunger: 150
+    hungerTreshold: 30
+    hungerRatePerSecond: 0.4
+    eatDistance: 1
+    maxThirst: 80
+    thirstTreshold: 30
+    thirstRatePerSecond: 0.2
     drinkingDistance: 2
     gestationTimeInSeconds: 10
     reproductionDistance: 2
@@ -1692,6 +1693,9 @@ MonoBehaviour:
     reproductionTreshold: 2
     maxBabies: 5
     minBabies: 1
+    averageDeathAge: 7
+    ageRatePerSecond: 1
+    reproductionAge: 5
 --- !u!4 &1234684011694395183
 Transform:
   m_ObjectHideFlags: 0
@@ -2146,6 +2150,63 @@ Transform:
   - {fileID: 1330960407925073107}
   m_Father: {fileID: 2150771452971665332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4769865552146268251
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.948317
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00000047683716
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.8345091
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348619680955664289, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+      propertyPath: m_Name
+      value: Fox
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
 --- !u!1 &4839991257384081217
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,7 +2387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6109841528828193114
 Transform:
   m_ObjectHideFlags: 0
@@ -2729,11 +2790,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae13a8e35402ec4a85f59a1ddcb4cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  babyPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
   currentHunger: 0
   currentThirst: 0
   currentGestation: 0
   currentReproductionUrge: 0
+  currentAge: 0
+  rabbitState: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2753,3 +2815,4 @@ SceneRoots:
   - {fileID: 1110067906}
   - {fileID: 319844244}
   - {fileID: 1359797158}
+  - {fileID: 4769865552146268251}

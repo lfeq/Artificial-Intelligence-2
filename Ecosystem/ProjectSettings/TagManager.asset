@@ -8,6 +8,7 @@ TagManager:
   - Bush
   - Tile
   - Rabbit
+  - Fox
   layers:
   - Default
   - TransparentFX
