@@ -9,6 +9,8 @@ TagManager:
   - Tile
   - Rabbit
   - Fox
+  - Deer
+  - Bear
   layers:
   - Default
   - TransparentFX

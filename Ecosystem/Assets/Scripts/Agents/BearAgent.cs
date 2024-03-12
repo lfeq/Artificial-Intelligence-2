@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
-public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie, IHideFromHunter {
+public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie {
     private GameObject babyPrefab;
     public float currentHunger;
     public float currentThirst;
@@ -12,18 +12,17 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     public float currentAge;
     private BaseAgent agent;
     private MovementManager movementManager;
-    [SerializeField] private RabbitState rabbitState;
+    [SerializeField] private BearState bearState;
     private GameObject closestFood;
     private GameObject closestWater;
     private GameObject closestMate;
-    private GameObject closestHunter;
     private BaseAgentData fatherBaseAgentData;
 
     private void Start() {
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.instance.getRabbitPrefab();
+        babyPrefab = LevelManager.instance.getBearPrefab();
         currentAge = 0;
     }
 
@@ -36,11 +35,11 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
 
     public void eat() {
         currentHunger = 0;
-        closestFood.SetActive(false);
+        Destroy(closestFood);
         closestFood = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
-        rabbitState = RabbitState.None;
+        bearState = BearState.None;
     }
 
     public void reduceVitals() {
@@ -74,7 +73,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedFoods = new List<GameObject>();
         foreach (Collider col in percibed) {
-            if (col.CompareTag("Bush") && col.gameObject.activeSelf) {
+            if ((col.CompareTag("Deer") || col.CompareTag("Rabbit") || col.CompareTag("Fox")) && col.gameObject.activeSelf) {
                 percibedFoods.Add(col.gameObject);
             }
         }
@@ -96,6 +95,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         }
         closestFood = tempClosestFood;
         agent.target = closestFood.transform;
+        agent.targetAgent = closestFood.GetComponent<BaseAgent>();
     }
 
     public void moveTowardFood() {
@@ -108,10 +108,10 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             return;
         }
         if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance) {
-            rabbitState = RabbitState.Eating;
+            bearState = BearState.Eating;
             return;
         }
-        movementManager.setMovementState(MovementState.Arriving);
+        movementManager.setMovementState(MovementState.Pursuing);
     }
 
     public void lookForWater() {
@@ -148,7 +148,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
             return;
         }
         if (Vector3.Distance(transform.position, closestWater.transform.position) <= agent.drinkingDistance) {
-            rabbitState = RabbitState.Drinking;
+            bearState = BearState.Drinking;
             return;
         }
         movementManager.setMovementState(MovementState.Arriving);
@@ -159,24 +159,24 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         closestWater = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
-        rabbitState = RabbitState.None;
+        bearState = BearState.None;
     }
 
     public void lookForMate() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedPossibleMates = new List<GameObject>();
         foreach (Collider col in percibed) {
-            if (col.CompareTag("Rabbit")) {
+            if (col.CompareTag(gameObject.tag)) {
                 if (col.GetComponent<BaseAgent>().genre == Genre.Male) {
                     percibedPossibleMates.Add(col.gameObject);
-                } // Only add male rabbits
+                } // Only add male foxes
             }
         }
         float attractiviestMate = 0f;
         GameObject tempClosestMate = null;
         foreach (GameObject mate in percibedPossibleMates) {
             BaseAgent mateBaseAgent = mate.GetComponent<BaseAgent>();
-            if (mate.GetComponent<RabbitAgent>().currentAge <= mateBaseAgent.reproductionAge) {
+            if (mate.GetComponent<BearAgent>().currentAge <= mateBaseAgent.reproductionAge) {
                 continue;
             }
             float tempAttractiveness = mate.GetComponent<BaseAgent>().attractiveness;
@@ -191,8 +191,8 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         }
         closestMate = tempClosestMate;
         agent.target = closestMate.transform;
-        closestMate.GetComponent<RabbitAgent>().waitForMate();
-        rabbitState = RabbitState.Reproduce;
+        closestMate.GetComponent<BearAgent>().waitForMate();
+        bearState = BearState.Reproduce;
     }
 
     public void moveTorwardsMate() {
@@ -207,105 +207,68 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         if (Vector3.Distance(transform.position, closestMate.transform.position) <= agent.reproductionDistance) {
             agent.isPregnant = true;
             currentReproductionUrge = 0;
-            rabbitState = RabbitState.None;
+            bearState = BearState.None;
             fatherBaseAgentData = closestMate.GetComponent<BaseAgent>().getBaseAgentData();
-            closestMate.GetComponent<RabbitAgent>().resetState();
+            closestMate.GetComponent<BearAgent>().resetState();
             return;
         }
         movementManager.setMovementState(MovementState.Arriving);
     }
 
     public void waitForMate() {
-        rabbitState = RabbitState.Reproduce;
+        bearState = BearState.Reproduce;
         movementManager.setMovementState(MovementState.None);
     }
 
     public void resetState() {
-        rabbitState = RabbitState.None;
-    }
-
-    public bool isCloseToHunter() {
-        Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
-        List<GameObject> percibedHunters = new List<GameObject>();
-        foreach (Collider col in percibed) {
-            if (col.CompareTag("Fox")) {
-                percibedHunters.Add(col.gameObject);
-            }
-        }
-        GameObject tempClosestHunter = null;
-        float tempClosestHunterDistance = float.MaxValue;
-        foreach (GameObject hunter in percibedHunters) {
-            BaseAgent mateBaseAgent = hunter.GetComponent<BaseAgent>();
-            float distance = Vector3.Distance(transform.position, hunter.transform.position);
-            if (tempClosestHunterDistance > distance) {
-                tempClosestHunter = hunter;
-                tempClosestHunterDistance = distance;
-            }
-        }
-
-        if (tempClosestHunter == null) {
-            return false;
-        }
-        closestHunter = tempClosestHunter;
-        agent.target = tempClosestHunter.transform;
-        agent.targetAgent = tempClosestHunter.GetComponent<BaseAgent>();
-        return true;
-    }
-
-    public void hideFromHunter() {
-        movementManager.setMovementState(MovementState.Evading);
+        bearState = BearState.None;
     }
 
     private void decisionManager() {
         if (isActing()) {
             return;
-        } // Rabbit is performing an action
-        if (isCloseToHunter()) {
-            rabbitState = RabbitState.Scared;
-        } else if (currentHunger >= agent.hungerTreshold) {
-            rabbitState = RabbitState.Hungry;
+        }
+        if (currentHunger >= agent.hungerTreshold) {
+            bearState = BearState.Hungry;
         } else if (currentThirst >= agent.thirstTreshold) {
-            rabbitState = RabbitState.Thirsty;
+            bearState = BearState.Thirsty;
         } else if (currentReproductionUrge >= agent.reproductionTreshold) {
-            rabbitState = RabbitState.LookingForMate;
+            bearState = BearState.LookingForMate;
         } else {
-            rabbitState = RabbitState.Wandering;
+            bearState = BearState.Wandering;
         }
     }
 
     private bool isActing() {
-        return rabbitState == RabbitState.Eating ||
-            rabbitState == RabbitState.Drinking ||
-            rabbitState == RabbitState.Reproduce;
+        return bearState == BearState.Eating ||
+            bearState == BearState.Drinking ||
+            bearState == BearState.Reproduce;
     }
 
     private void act() {
-        switch (rabbitState) {
-            case RabbitState.None:
+        switch (bearState) {
+            case BearState.None:
                 break;
-            case RabbitState.Wandering:
+            case BearState.Wandering:
                 movementManager.setMovementState(MovementState.Wandering);
                 break;
-            case RabbitState.Hungry:
+            case BearState.Hungry:
                 moveTowardFood();
                 break;
-            case RabbitState.Eating:
+            case BearState.Eating:
                 eat();
                 break;
-            case RabbitState.Thirsty:
+            case BearState.Thirsty:
                 moveTowardsWater();
                 break;
-            case RabbitState.Drinking:
+            case BearState.Drinking:
                 drink();
                 break;
-            case RabbitState.Reproduce:
+            case BearState.Reproduce:
                 moveTorwardsMate();
                 break;
-            case RabbitState.LookingForMate:
+            case BearState.LookingForMate:
                 lookForMate();
-                break;
-            case RabbitState.Scared:
-                hideFromHunter();
                 break;
         }
     }
@@ -322,7 +285,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         currentGestation = 0f;
     }
 
-    private enum RabbitState {
+    private enum BearState {
         None,
         Wandering,
         Hungry,
@@ -331,6 +294,5 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         Drinking,
         Reproduce,
         LookingForMate,
-        Scared
     }
 }

@@ -6,6 +6,8 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField] private GameObject rabbitPrefab;
     [SerializeField] private GameObject foxPrefab;
+    [SerializeField] private GameObject deerPrefab;
+    [SerializeField] private GameObject bearPrefab;
 
     private void Awake() {
         if (FindObjectOfType<LevelManager>() != null &&
@@ -22,5 +24,13 @@ public class LevelManager : MonoBehaviour {
 
     public GameObject getFoxPrefab() {
         return foxPrefab;
+    }
+
+    public GameObject getDeerPrefab() {
+        return deerPrefab;
+    }
+
+    public GameObject getBearPrefab() {
+        return bearPrefab;
     }
 }
