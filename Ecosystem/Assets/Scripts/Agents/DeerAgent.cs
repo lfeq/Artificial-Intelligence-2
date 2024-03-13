@@ -23,7 +23,7 @@ public class DeerAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.instance.getDeerPrefab();
+        babyPrefab = LevelManager.s_instance.getDeerPrefab();
         currentAge = 0;
     }
 
@@ -70,6 +70,10 @@ public class DeerAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         Destroy(gameObject);
     }
 
+    private void OnDestroy() {
+        LevelManager.s_instance.deadAnimal(gameObject.tag);
+    }
+
     public void lookForFood() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedFoods = new List<GameObject>();
@@ -99,7 +103,7 @@ public class DeerAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     }
 
     public void moveTowardFood() {
-        if (closestFood == null) {
+        if (closestFood == null || agent.target == null) {
             lookForFood();
             return;
         }

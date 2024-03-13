@@ -22,7 +22,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.instance.getBearPrefab();
+        babyPrefab = LevelManager.s_instance.getBearPrefab();
         currentAge = 0;
     }
 
@@ -69,11 +69,15 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         Destroy(gameObject);
     }
 
+    private void OnDestroy() {
+        LevelManager.s_instance.deadAnimal(gameObject.tag);
+    }
+
     public void lookForFood() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedFoods = new List<GameObject>();
         foreach (Collider col in percibed) {
-            if ((col.CompareTag("Deer") || col.CompareTag("Rabbit") || col.CompareTag("Fox")) && col.gameObject.activeSelf) {
+            if ((col.CompareTag("Deer") || col.CompareTag("Rabbit")) && col.gameObject.activeSelf) {
                 percibedFoods.Add(col.gameObject);
             }
         }
@@ -109,6 +113,10 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         }
         if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance) {
             bearState = BearState.Eating;
+            return;
+        }
+        if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance * 3) {
+            movementManager.setMovementState(MovementState.Arriving);
             return;
         }
         movementManager.setMovementState(MovementState.Pursuing);

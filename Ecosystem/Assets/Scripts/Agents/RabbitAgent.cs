@@ -23,7 +23,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.instance.getRabbitPrefab();
+        babyPrefab = LevelManager.s_instance.getRabbitPrefab();
         currentAge = 0;
     }
 
@@ -68,6 +68,10 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
 
     public void die() {
         Destroy(gameObject);
+    }
+
+    private void OnDestroy() {
+        LevelManager.s_instance.deadAnimal(gameObject.tag);
     }
 
     public void lookForFood() {

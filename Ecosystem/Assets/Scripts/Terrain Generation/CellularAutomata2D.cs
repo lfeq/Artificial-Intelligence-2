@@ -1,7 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Poner limite al mapa
 /// <summary>
 /// Manages the generation and visualization of 2D cellular automata maps.
 /// </summary>
@@ -14,10 +14,7 @@ public class CellularAutomata2D : MonoBehaviour {
 
     private bool[,] m_map1;
     private GameObject[,] m_tilesInWorld;
-
-    private void Start() {
-        generateAutomata();
-    }
+    private List<GameObject> walkableTiles = new List<GameObject>();
 
     /// <summary>
     /// Generates a new 2D cellular automata map based on specified parameters.
@@ -26,6 +23,11 @@ public class CellularAutomata2D : MonoBehaviour {
         GenerateRandomMap();
         generateMapInSceneNoDelay();
         setTiles();
+        LevelManager.s_instance.setLevelState(LevelState.Menu);
+    }
+
+    public Transform getRandomWalkableTileTransform() {
+        return walkableTiles[Random.Range(0, walkableTiles.Count)].transform;
     }
 
     private void drawTiles() {
@@ -50,6 +52,10 @@ public class CellularAutomata2D : MonoBehaviour {
                     tileController.setTileType(TileType.Earth);
                 }
                 tileController.setEarthTileAroundTile(wallsArround);
+                tileObj.isStatic = true;
+                if (tileType == TileType.Grass) {
+                    walkableTiles.Add(tileObj);
+                }
             }
         }
     }

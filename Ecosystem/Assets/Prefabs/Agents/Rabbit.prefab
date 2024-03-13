@@ -549,7 +549,7 @@ MonoBehaviour:
     collisionAvoidanceForce: 2
     maxHunger: 50
     hungerTreshold: 25
-    hungerRatePerSecond: 6
+    hungerRatePerSecond: 3
     eatDistance: 2
     maxThirst: 100
     thirstTreshold: 34
@@ -564,7 +564,7 @@ MonoBehaviour:
     minBabies: 1
     averageDeathAge: 35
     ageRatePerSecond: 0.3
-    reproductionAge: 3.3333333
+    reproductionAge: 2.564102
 --- !u!114 &7509004474085897303
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -33,9 +33,11 @@ public class MovementManager : MonoBehaviour {
                 break;
             case MovementState.Pursuing:
                 steeringForce += SteeringBehaviours.pursuit(agent, agent.targetAgent);
+                steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
             case MovementState.Evading:
                 steeringForce += SteeringBehaviours.evade(agent, agent.targetAgent);
+                steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
             case MovementState.Arriving:
                 steeringForce += SteeringBehaviours.seek(agent, agent.target.position, false);
@@ -48,6 +50,7 @@ public class MovementManager : MonoBehaviour {
         steeringForce = Vector3.ClampMagnitude(steeringForce, agent.maxSteeringForce);
         steeringForce = steeringForce / agent.getMass();
         rb.velocity = Vector3.ClampMagnitude(rb.velocity + steeringForce, agent.maxSpeed);
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
     }
 
     private void lookAtDirection() {

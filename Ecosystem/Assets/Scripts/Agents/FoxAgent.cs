@@ -22,7 +22,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.instance.getFoxPrefab();
+        babyPrefab = LevelManager.s_instance.getFoxPrefab();
         currentAge = 0;
     }
 
@@ -69,6 +69,10 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         Destroy(gameObject);
     }
 
+    private void OnDestroy() {
+        LevelManager.s_instance.deadAnimal(gameObject.tag);
+    }
+
     public void lookForFood() {
         Collider[] percibed = Physics.OverlapSphere(agent.eyePosition.position, agent.eyeRadius);
         List<GameObject> percibedFoods = new List<GameObject>();
@@ -109,6 +113,10 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         }
         if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance) {
             foxState = FoxState.Eating;
+            return;
+        }
+        if (Vector3.Distance(transform.position, closestFood.transform.position) <= agent.eatDistance * 3) {
+            movementManager.setMovementState(MovementState.Arriving);
             return;
         }
         movementManager.setMovementState(MovementState.Pursuing);

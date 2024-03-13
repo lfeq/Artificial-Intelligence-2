@@ -980,22 +980,22 @@ MonoBehaviour:
     wanderAngle: 0.5
     genre: 0
     maxSpeed: 1.5
-    maxSteeringForce: 3
+    maxSteeringForce: 3.6
     slowingRadius: 5
     target: {fileID: 0}
     targetAgent: {fileID: 0}
-    eyeRadius: 4
+    eyeRadius: 8.4
     eyePosition: {fileID: 2521818866830120921}
-    angleChange: 0.2
+    angleChange: 0.3
     circleDistance: 2
     circleRadius: 2
     collisionObstacleAvoidanceRadius: 1
     collisionAvoidanceForce: 2
-    maxHunger: 100
-    hungerTreshold: 20.83333
-    hungerRatePerSecond: 0.6
-    eatDistance: 1
-    maxThirst: 80
+    maxHunger: 130
+    hungerTreshold: 17.09402
+    hungerRatePerSecond: 0.3550296
+    eatDistance: 2
+    maxThirst: 112
     thirstTreshold: 40
     thirstRatePerSecond: 0.2
     drinkingDistance: 2
@@ -1007,8 +1007,8 @@ MonoBehaviour:
     maxBabies: 3
     minBabies: 1
     averageDeathAge: 55
-    ageRatePerSecond: 0.5
-    reproductionAge: 15
+    ageRatePerSecond: 0.3
+    reproductionAge: 11.53846
 --- !u!114 &3410064284235247105
 MonoBehaviour:
   m_ObjectHideFlags: 0
