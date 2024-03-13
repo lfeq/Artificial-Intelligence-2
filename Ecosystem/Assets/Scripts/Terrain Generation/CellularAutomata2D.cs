@@ -8,9 +8,9 @@ using UnityEngine;
 public class CellularAutomata2D : MonoBehaviour {
     [SerializeField] private GameObject tilePrefab;
     [SerializeField, Range(0.01f, 1)] private float cubeProbability = 0.5f;
-    [SerializeField] private int m_iterations = 5;
-    [SerializeField] private int m_gridWidth = 50;
-    [SerializeField] private int m_gridHeight = 50;
+    [SerializeField] private int iterations = 5;
+    [SerializeField] private int gridWidth = 50;
+    [SerializeField] private int gridHeight = 50;
 
     private bool[,] m_map1;
     private GameObject[,] m_tilesInWorld;
@@ -31,9 +31,9 @@ public class CellularAutomata2D : MonoBehaviour {
     }
 
     private void drawTiles() {
-        m_tilesInWorld = new GameObject[m_gridWidth, m_gridHeight];
-        for (int i = 0; i < m_gridWidth; i++) {
-            for (int j = 0; j < m_gridHeight; j++) {
+        m_tilesInWorld = new GameObject[gridWidth, gridHeight];
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
                 if (m_tilesInWorld[i, j] == null) {
                     Vector3 spawnPos = new Vector3(i, 0, j);
                     GameObject tile = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
@@ -42,8 +42,9 @@ public class CellularAutomata2D : MonoBehaviour {
                 }
                 GameObject tileObj = m_tilesInWorld[i, j];
                 TileController tileController = tileObj.GetComponent<TileController>();
+                // Set tile type
                 TileType tileType = m_map1[i, j] ? TileType.Grass : TileType.Water;
-                if (i == 0 || i == m_gridWidth - 1 || j == 0 || j == m_gridHeight - 1) {
+                if (i == 0 || i == gridWidth - 1 || j == 0 || j == gridHeight - 1) {
                     tileType = TileType.Border;
                 }
                 tileController.setTileType(tileType);
@@ -64,18 +65,18 @@ public class CellularAutomata2D : MonoBehaviour {
     /// Generates a random initial map for the cellular automata based on specified parameters.
     /// </summary>
     private void GenerateRandomMap() {
-        m_map1 = new bool[m_gridWidth, m_gridHeight]; // x, y
-        for (int y = 0; y < m_gridHeight; y++) {
-            for (int x = 0; x < m_gridWidth; x++) {
-                m_map1[y, x] = Random.value < cubeProbability; // True = wall, false = floor;
+        m_map1 = new bool[gridWidth, gridHeight]; // x, y
+        for (int y = 0; y < gridHeight; y++) {
+            for (int x = 0; x < gridWidth; x++) {
+                m_map1[y, x] = Random.value < cubeProbability; // true = grass, false = water
             }
         }
     }
 
     private void iterateNewMap() {
-        bool[,] tempMap = new bool[m_gridWidth, m_gridHeight];
-        for (int y = 0; y < m_gridHeight; y++) {
-            for (int x = 0; x < m_gridWidth; x++) {
+        bool[,] tempMap = new bool[gridWidth, gridHeight];
+        for (int y = 0; y < gridHeight; y++) {
+            for (int x = 0; x < gridWidth; x++) {
                 int num = numWallsAroundTile(x, y);
                 tempMap[x, y] = num >= 5;
             }
@@ -96,37 +97,25 @@ public class CellularAutomata2D : MonoBehaviour {
     }
 
     private bool isSolid(int x, int y) {
-        if (x < 0 || x >= m_gridWidth || y < 0 || y >= m_gridHeight) {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return true;
         }
         return m_map1[x, y];
     }
 
     /// <summary>
-    /// Generates the cellular automata map and visualizes it in the scene with a delay between iterations.
-    /// </summary>
-    /// <returns>Coroutine for delayed map generation.</returns>
-    private IEnumerator generateMapInScene() {
-        for (int i = 0; i <= m_iterations; i++) {
-            drawTiles();
-            yield return new WaitForSeconds(0.1f);
-            iterateNewMap();
-        }
-    }
-
-    /// <summary>
     /// Generates the cellular automata map and visualizes it in the scene without any delay between iterations.
     /// </summary>
     private void generateMapInSceneNoDelay() {
-        for (int i = 0; i <= m_iterations; i++) {
+        for (int i = 0; i <= iterations; i++) {
             iterateNewMap();
         }
         drawTiles();
     }
 
     private void setTiles() {
-        for (int i = 0; i < m_gridWidth; i++) {
-            for (int j = 0; j < m_gridHeight; j++) {
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
                 GameObject tileObj = m_tilesInWorld[i, j];
                 TileController tileController = tileObj.GetComponent<TileController>();
                 tileController.setupTiles();
