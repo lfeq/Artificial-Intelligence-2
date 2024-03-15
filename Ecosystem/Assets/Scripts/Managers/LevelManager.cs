@@ -109,6 +109,7 @@ public class LevelManager : MonoBehaviour {
         levelGenerator.generateAutomata();
     }
 
+    // TODO: Pasar esto a una factory
     private void startSimulation() {
         BaseAgent tempAgent;
         rabbitCount = uiManager.getRabbitCount();
@@ -134,6 +135,7 @@ public class LevelManager : MonoBehaviour {
         setText();
     }
 
+    // TODO: Pasar esto a un observer
     private void setText() {
         rabbitCountText.text = $"Rabbits: {rabbitCount}";
         foxCountText.text = $"Foxes: {foxCount}";
