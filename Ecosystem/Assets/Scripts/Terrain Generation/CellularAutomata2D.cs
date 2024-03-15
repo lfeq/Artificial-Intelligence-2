@@ -6,6 +6,8 @@ using UnityEngine;
 /// Manages the generation and visualization of 2D cellular automata maps.
 /// </summary>
 public class CellularAutomata2D : MonoBehaviour {
+    public static CellularAutomata2D s_instance;
+
     [SerializeField] private GameObject tilePrefab;
     [SerializeField, Range(0.01f, 1)] private float cubeProbability = 0.5f;
     [SerializeField] private int iterations = 5;
@@ -15,6 +17,15 @@ public class CellularAutomata2D : MonoBehaviour {
     private bool[,] m_map1;
     private GameObject[,] m_tilesInWorld;
     private List<GameObject> walkableTiles = new List<GameObject>();
+
+    private void Awake() {
+        if (FindObjectOfType<CellularAutomata2D>() != null &&
+            FindObjectOfType<CellularAutomata2D>().gameObject != gameObject) {
+            Destroy(gameObject);
+            return;
+        }
+        s_instance = this;
+    }
 
     /// <summary>
     /// Generates a new 2D cellular automata map based on specified parameters.

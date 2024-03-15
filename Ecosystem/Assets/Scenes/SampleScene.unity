@@ -1251,6 +1251,54 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &512706570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512706572}
+  - component: {fileID: 512706571}
+  m_Layer: 0
+  m_Name: AgentCountObserver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &512706571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512706570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e2c952eae67a5b40bab9b7bea16f6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rabbitCountText: {fileID: 1519105277}
+  foxCountText: {fileID: 770421975}
+  deerCountText: {fileID: 1350623247}
+  bearCountText: {fileID: 45274768}
+--- !u!4 &512706572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512706570}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &547903669
 GameObject:
   m_ObjectHideFlags: 0
@@ -2828,9 +2876,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 299252513381050704, guid: 4f6c6a73c0a8ba949a7bc98ce5141093, type: 3}
   cubeProbability: 0.55
-  m_iterations: 3
-  m_gridWidth: 80
-  m_gridHeight: 80
+  iterations: 5
+  gridWidth: 50
+  gridHeight: 50
 --- !u!4 &1006452463
 Transform:
   m_ObjectHideFlags: 0
@@ -4806,6 +4854,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670359304}
   m_CullTransparentMesh: 1
+--- !u!1 &1941931476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1941931478}
+  - component: {fileID: 1941931477}
+  m_Layer: 0
+  m_Name: AgentFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1941931477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941931476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98bafaf88c1d2c64489c11780819570a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rabbitPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
+  foxPrefab: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+  deerPrefab: {fileID: 8267329189155528070, guid: 3e2b04a4420d8a143b431f997dbd5e00, type: 3}
+  bearPrefab: {fileID: 1610295903417832331, guid: 8bbf9b581a18b374292be0d48b60731e, type: 3}
+--- !u!4 &1941931478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941931476}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2025027325
 GameObject:
   m_ObjectHideFlags: 0
@@ -4938,16 +5034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a45e55d68f868e48ab2bd37dadd0346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rabbitPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
-  foxPrefab: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
-  deerPrefab: {fileID: 8267329189155528070, guid: 3e2b04a4420d8a143b431f997dbd5e00, type: 3}
-  bearPrefab: {fileID: 1610295903417832331, guid: 8bbf9b581a18b374292be0d48b60731e, type: 3}
-  levelGenerator: {fileID: 1006452462}
   uiManager: {fileID: 1231589333}
-  rabbitCountText: {fileID: 1519105277}
-  foxCountText: {fileID: 770421975}
-  deerCountText: {fileID: 1350623247}
-  bearCountText: {fileID: 45274768}
 --- !u!4 &2138869290
 Transform:
   m_ObjectHideFlags: 0
@@ -4973,3 +5060,5 @@ SceneRoots:
   - {fileID: 2138869290}
   - {fileID: 2025027329}
   - {fileID: 1521916782}
+  - {fileID: 1941931478}
+  - {fileID: 512706572}

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//TODO: Solo poder mover la camara cuando el levelmanager esta en estado playing
 public class CameraController : MonoBehaviour {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 100f;

@@ -32,14 +32,23 @@ public class MovementManager : MonoBehaviour {
             case MovementState.None:
                 break;
             case MovementState.Pursuing:
+                if (agent.targetAgent == null) {
+                    return;
+                }
                 steeringForce += SteeringBehaviours.pursuit(agent, agent.targetAgent);
                 steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
             case MovementState.Evading:
+                if (agent.targetAgent == null) {
+                    return;
+                }
                 steeringForce += SteeringBehaviours.evade(agent, agent.targetAgent);
                 steeringForce += SteeringBehaviours.collisionAvoidance(agent);
                 break;
             case MovementState.Arriving:
+                if (agent.target == null) {
+                    return;
+                }
                 steeringForce += SteeringBehaviours.seek(agent, agent.target.position, false);
                 break;
             case MovementState.Wandering:

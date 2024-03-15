@@ -37,7 +37,6 @@ public class BaseAgent : MonoBehaviour {
         angleChange = t_baseAgent.angleChange;
         circleDistance = t_baseAgent.circleDistance;
         circleRadius = t_baseAgent.circleRadius;
-        LevelManager.s_instance.addAnimal(gameObject.tag);
     }
 
     public Vector3 getCurrentVelocity() {

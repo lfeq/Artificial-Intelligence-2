@@ -22,7 +22,6 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
         currentHunger = 0;
-        babyPrefab = LevelManager.s_instance.getFoxPrefab();
         currentAge = 0;
     }
 
@@ -70,7 +69,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     }
 
     private void OnDestroy() {
-        LevelManager.s_instance.deadAnimal(gameObject.tag);
+        AgentFactory.s_instance.killAnimal(gameObject.tag);
     }
 
     public void lookForFood() {
@@ -284,9 +283,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     private void giveBirth() {
         int numBabies = Random.Range(agent.minBabies, agent.maxBabies);
         for (int i = 0; i < numBabies; i++) {
-            BaseAgent baby = Instantiate(babyPrefab, transform.position, Quaternion.identity).GetComponent<BaseAgent>();
-            BaseAgentData genes = GeneticsManager.reproduce(fatherBaseAgentData, agent.getBaseAgentData());
-            baby.init(genes);
+            AgentFactory.s_instance.spawnAgent(gameObject.tag, fatherBaseAgentData, agent.getBaseAgentData(), transform.position);
         }
         closestMate = null;
         agent.isPregnant = false;
