@@ -31,22 +31,22 @@ public class AgentFactory : MonoBehaviour {
         BaseAgent tempAgent;
         for (int i = 0; i < t_rabbitCount; i++) {
             tempAgent = Instantiate(rabbitPrefab, CellularAutomata2D.s_instance.getRandomWalkableTileTransform().position, Quaternion.identity).GetComponent<BaseAgent>();
-            tempAgent.genre = (i % 2 == 0) ? Genre.Male : Genre.Female;
+            tempAgent.gender = (i % 2 == 0) ? Gender.Male : Gender.Female;
             onRabbitBorn?.Invoke();
         }
         for (int i = 0; i < t_foxCount; i++) {
             tempAgent = Instantiate(foxPrefab, CellularAutomata2D.s_instance.getRandomWalkableTileTransform().position, Quaternion.identity).GetComponent<BaseAgent>();
-            tempAgent.genre = (i % 2 == 0) ? Genre.Male : Genre.Female;
+            tempAgent.gender = (i % 2 == 0) ? Gender.Male : Gender.Female;
             onFoxBorn?.Invoke();
         }
         for (int i = 0; i < t_deerCount; i++) {
             tempAgent = Instantiate(deerPrefab, CellularAutomata2D.s_instance.getRandomWalkableTileTransform().position, Quaternion.identity).GetComponent<BaseAgent>();
-            tempAgent.genre = (i % 2 == 0) ? Genre.Male : Genre.Female;
+            tempAgent.gender = (i % 2 == 0) ? Gender.Male : Gender.Female;
             onDeerBorn?.Invoke();
         }
         for (int i = 0; i < t_bearCount; i++) {
             tempAgent = Instantiate(bearPrefab, CellularAutomata2D.s_instance.getRandomWalkableTileTransform().position, Quaternion.identity).GetComponent<BaseAgent>();
-            tempAgent.genre = (i % 2 == 0) ? Genre.Male : Genre.Female;
+            tempAgent.gender = (i % 2 == 0) ? Gender.Male : Gender.Female;
             onBearBorn?.Invoke();
         }
     }

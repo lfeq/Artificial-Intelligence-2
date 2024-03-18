@@ -4,12 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
 public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie {
-    private GameObject babyPrefab;
-    public float currentHunger;
-    public float currentThirst;
-    public float currentGestation;
-    public float currentReproductionUrge;
-    public float currentAge;
     private BaseAgent agent;
     private MovementManager movementManager;
     [SerializeField] private BearState bearState;
@@ -21,8 +15,6 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     private void Start() {
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
-        currentHunger = 0;
-        currentAge = 0;
     }
 
     private void Update() {
@@ -33,7 +25,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     }
 
     public void eat() {
-        currentHunger = 0;
+        agent.currentHunger = 0;
         Destroy(closestFood);
         closestFood = null;
         agent.target = null;
@@ -42,24 +34,24 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     }
 
     public void reduceVitals() {
-        currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
-        currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
-        currentAge += Time.deltaTime * agent.ageRatePerSecond;
+        agent.currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
+        agent.currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
+        agent.currentAge += Time.deltaTime * agent.ageRatePerSecond;
         if (agent.isPregnant) {
-            currentGestation += Time.deltaTime;
+            agent.currentGestation += Time.deltaTime;
         }
-        if (agent.genre == Genre.Female && !agent.isPregnant && agent.reproductionAge <= currentAge) {
-            currentReproductionUrge += Time.deltaTime * currentAge;
+        if (agent.gender == Gender.Female && !agent.isPregnant && agent.reproductionAge <= agent.currentAge) {
+            agent.currentReproductionUrge += Time.deltaTime * agent.currentAge;
         }
     }
 
     public void checkVitals() {
-        if (currentGestation >= agent.gestationTimeInSeconds) {
+        if (agent.currentGestation >= agent.gestationTimeInSeconds) {
             giveBirth();
         }
-        if (currentHunger >= agent.maxHunger ||
-            currentThirst >= agent.maxThirst ||
-            currentAge >= agent.averageDeathAge) {
+        if (agent.currentHunger >= agent.maxHunger ||
+            agent.currentThirst >= agent.maxThirst ||
+            agent.currentAge >= agent.averageDeathAge) {
             die();
         }
     }
@@ -162,7 +154,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     }
 
     public void drink() {
-        currentThirst = 0;
+        agent.currentThirst = 0;
         closestWater = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
@@ -174,7 +166,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         List<GameObject> percibedPossibleMates = new List<GameObject>();
         foreach (Collider col in percibed) {
             if (col.CompareTag(gameObject.tag)) {
-                if (col.GetComponent<BaseAgent>().genre == Genre.Male) {
+                if (col.GetComponent<BaseAgent>().gender == Gender.Male) {
                     percibedPossibleMates.Add(col.gameObject);
                 } // Only add male foxes
             }
@@ -183,7 +175,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         GameObject tempClosestMate = null;
         foreach (GameObject mate in percibedPossibleMates) {
             BaseAgent mateBaseAgent = mate.GetComponent<BaseAgent>();
-            if (mate.GetComponent<BearAgent>().currentAge <= mateBaseAgent.reproductionAge) {
+            if (mateBaseAgent.currentAge <= mateBaseAgent.reproductionAge) {
                 continue;
             }
             float tempAttractiveness = mate.GetComponent<BaseAgent>().attractiveness;
@@ -203,7 +195,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
     }
 
     public void moveTorwardsMate() {
-        if (agent.genre == Genre.Male) {
+        if (agent.gender == Gender.Male) {
             movementManager.setMovementState(MovementState.None);
             return;
         }
@@ -213,7 +205,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         }
         if (Vector3.Distance(transform.position, closestMate.transform.position) <= agent.reproductionDistance) {
             agent.isPregnant = true;
-            currentReproductionUrge = 0;
+            agent.currentReproductionUrge = 0;
             bearState = BearState.None;
             fatherBaseAgentData = closestMate.GetComponent<BaseAgent>().getBaseAgentData();
             closestMate.GetComponent<BearAgent>().resetState();
@@ -235,11 +227,11 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         if (isActing()) {
             return;
         }
-        if (currentHunger >= agent.hungerTreshold) {
+        if (agent.currentHunger >= agent.hungerTreshold) {
             bearState = BearState.Hungry;
-        } else if (currentThirst >= agent.thirstTreshold) {
+        } else if (agent.currentThirst >= agent.thirstTreshold) {
             bearState = BearState.Thirsty;
-        } else if (currentReproductionUrge >= agent.reproductionTreshold) {
+        } else if (agent.currentReproductionUrge >= agent.reproductionTreshold) {
             bearState = BearState.LookingForMate;
         } else {
             bearState = BearState.Wandering;
@@ -287,7 +279,7 @@ public class BearAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILook
         }
         closestMate = null;
         agent.isPregnant = false;
-        currentGestation = 0f;
+        agent.currentGestation = 0f;
     }
 
     private enum BearState {

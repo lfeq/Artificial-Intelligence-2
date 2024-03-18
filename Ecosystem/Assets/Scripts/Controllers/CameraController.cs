@@ -9,6 +9,13 @@ public class CameraController : MonoBehaviour {
     private float verticalRotation = 0f;
 
     private void Update() {
+        if (LevelManager.s_instance.getLevelState() != LevelState.Playing) {
+            return;
+        }
+        if (!Input.GetMouseButton(1)) {
+            Cursor.visible = true;
+            return;
+        }
         // Hide Mouse
         Cursor.visible = false;
         // Translation

@@ -4,12 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
 public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie {
-    private GameObject babyPrefab;
-    public float currentHunger;
-    public float currentThirst;
-    public float currentGestation;
-    public float currentReproductionUrge;
-    public float currentAge;
     private BaseAgent agent;
     private MovementManager movementManager;
     [SerializeField] private FoxState foxState;
@@ -21,8 +15,8 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     private void Start() {
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
-        currentHunger = 0;
-        currentAge = 0;
+        agent.currentHunger = 0;
+        agent.currentAge = 0;
     }
 
     private void Update() {
@@ -33,7 +27,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     }
 
     public void eat() {
-        currentHunger = 0;
+        agent.currentHunger = 0;
         Destroy(closestFood);
         closestFood = null;
         agent.target = null;
@@ -42,24 +36,24 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     }
 
     public void reduceVitals() {
-        currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
-        currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
-        currentAge += Time.deltaTime * agent.ageRatePerSecond;
+        agent.currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
+        agent.currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
+        agent.currentAge += Time.deltaTime * agent.ageRatePerSecond;
         if (agent.isPregnant) {
-            currentGestation += Time.deltaTime;
+            agent.currentGestation += Time.deltaTime;
         }
-        if (agent.genre == Genre.Female && !agent.isPregnant && agent.reproductionAge <= currentAge) {
-            currentReproductionUrge += Time.deltaTime * currentAge;
+        if (agent.gender == Gender.Female && !agent.isPregnant && agent.reproductionAge <= agent.currentAge) {
+            agent.currentReproductionUrge += Time.deltaTime * agent.currentAge;
         }
     }
 
     public void checkVitals() {
-        if (currentGestation >= agent.gestationTimeInSeconds) {
+        if (agent.currentGestation >= agent.gestationTimeInSeconds) {
             giveBirth();
         }
-        if (currentHunger >= agent.maxHunger ||
-            currentThirst >= agent.maxThirst ||
-            currentAge >= agent.averageDeathAge) {
+        if (agent.currentHunger >= agent.maxHunger ||
+            agent.currentThirst >= agent.maxThirst ||
+            agent.currentAge >= agent.averageDeathAge) {
             die();
         }
     }
@@ -162,7 +156,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     }
 
     public void drink() {
-        currentThirst = 0;
+        agent.currentThirst = 0;
         closestWater = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
@@ -174,7 +168,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         List<GameObject> percibedPossibleMates = new List<GameObject>();
         foreach (Collider col in percibed) {
             if (col.CompareTag("Fox")) {
-                if (col.GetComponent<BaseAgent>().genre == Genre.Male) {
+                if (col.GetComponent<BaseAgent>().gender == Gender.Male) {
                     percibedPossibleMates.Add(col.gameObject);
                 } // Only add male foxes
             }
@@ -183,7 +177,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         GameObject tempClosestMate = null;
         foreach (GameObject mate in percibedPossibleMates) {
             BaseAgent mateBaseAgent = mate.GetComponent<BaseAgent>();
-            if (mate.GetComponent<FoxAgent>().currentAge <= mateBaseAgent.reproductionAge) {
+            if (mateBaseAgent.currentAge <= mateBaseAgent.reproductionAge) {
                 continue;
             }
             float tempAttractiveness = mate.GetComponent<BaseAgent>().attractiveness;
@@ -203,7 +197,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
     }
 
     public void moveTorwardsMate() {
-        if (agent.genre == Genre.Male) {
+        if (agent.gender == Gender.Male) {
             movementManager.setMovementState(MovementState.None);
             return;
         }
@@ -213,7 +207,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         }
         if (Vector3.Distance(transform.position, closestMate.transform.position) <= agent.reproductionDistance) {
             agent.isPregnant = true;
-            currentReproductionUrge = 0;
+            agent.currentReproductionUrge = 0;
             foxState = FoxState.None;
             fatherBaseAgentData = closestMate.GetComponent<BaseAgent>().getBaseAgentData();
             closestMate.GetComponent<FoxAgent>().resetState();
@@ -235,11 +229,11 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         if (isActing()) {
             return;
         } // Rabbit is performing an action
-        if (currentHunger >= agent.hungerTreshold) {
+        if (agent.currentHunger >= agent.hungerTreshold) {
             foxState = FoxState.Hungry;
-        } else if (currentThirst >= agent.thirstTreshold) {
+        } else if (agent.currentThirst >= agent.thirstTreshold) {
             foxState = FoxState.Thirsty;
-        } else if (currentReproductionUrge >= agent.reproductionTreshold) {
+        } else if (agent.currentReproductionUrge >= agent.reproductionTreshold) {
             foxState = FoxState.LookingForMate;
         } else {
             foxState = FoxState.Wandering;
@@ -287,7 +281,7 @@ public class FoxAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookF
         }
         closestMate = null;
         agent.isPregnant = false;
-        currentGestation = 0f;
+        agent.currentGestation = 0f;
     }
 
     private enum FoxState {

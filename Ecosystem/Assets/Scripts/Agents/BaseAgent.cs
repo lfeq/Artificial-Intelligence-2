@@ -20,7 +20,7 @@ public class BaseAgent : MonoBehaviour {
     #endregion Unity functions
 
     public void init(BaseAgentData t_baseAgent) {
-        genre = t_baseAgent.genre;
+        gender = t_baseAgent.gender;
         maxSpeed = t_baseAgent.maxSpeed;
         maxSteeringForce = t_baseAgent.maxSteeringForce;
         slowingRadius = t_baseAgent.slowingRadius;
@@ -52,9 +52,9 @@ public class BaseAgent : MonoBehaviour {
         set { agentData.wanderAngle = value; }
     }
 
-    public Genre genre {
-        get { return agentData.genre; }
-        set { agentData.genre = value; }
+    public Gender gender {
+        get { return agentData.gender; }
+        set { agentData.gender = value; }
     }
 
     public float maxSpeed {
@@ -170,7 +170,7 @@ public class BaseAgent : MonoBehaviour {
     public bool isPregnant {
         get { return agentData.isPregnant; }
         set {
-            if (genre == Genre.Male) {
+            if (gender == Gender.Male) {
                 return;
             }
             agentData.isPregnant = value;
@@ -215,9 +215,34 @@ public class BaseAgent : MonoBehaviour {
     public BaseAgentData getBaseAgentData() {
         return agentData;
     }
+
+    public float currentHunger {
+        get { return agentData.currentHunger; }
+        set { agentData.currentHunger = value; }
+    }
+
+    public float currentThirst {
+        get { return agentData.currentThirst; }
+        set { agentData.currentThirst = value; }
+    }
+
+    public float currentGestation {
+        get { return agentData.currentGestation; }
+        set { agentData.currentGestation = value; }
+    }
+
+    public float currentReproductionUrge {
+        get { return agentData.currentReproductionUrge; }
+        set { agentData.reproductionAge = value; }
+    }
+
+    public float currentAge {
+        get { return agentData.currentAge; }
+        set { agentData.currentAge = value; }
+    }
 }
 
-public enum Genre {
+public enum Gender {
     Female,
     Male
 }

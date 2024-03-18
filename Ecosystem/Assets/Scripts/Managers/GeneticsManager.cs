@@ -6,7 +6,7 @@ public class GeneticsManager {
         float mutationProbability = 0.1f;
         BaseAgentData sonAgent = new BaseAgentData();
         // 50/50 chance male or female
-        sonAgent.genre = Random.value < 0.5f ? Genre.Male : Genre.Female; // 50/50 chance male or female
+        sonAgent.gender = Random.value < 0.5f ? Gender.Male : Gender.Female; // 50/50 chance male or female
         // Set son maxSpeed
         sonAgent.maxSpeed = Random.value < 0.5f ? t_father.maxSpeed : t_mother.maxSpeed;
         if (Random.value < mutationProbability) {

@@ -4,12 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(BaseAgent))]
 [RequireComponent(typeof(MovementManager))]
 public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILookForWater, IDrink, ILookForMate, IDie, IHideFromHunter {
-    private GameObject babyPrefab;
-    public float currentHunger;
-    public float currentThirst;
-    public float currentGestation;
-    public float currentReproductionUrge;
-    public float currentAge;
     private BaseAgent agent;
     private MovementManager movementManager;
     [SerializeField] private RabbitState rabbitState;
@@ -22,8 +16,8 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     private void Start() {
         agent = GetComponent<BaseAgent>();
         movementManager = GetComponent<MovementManager>();
-        currentHunger = 0;
-        currentAge = 0;
+        agent.currentHunger = 0;
+        agent.currentAge = 0;
     }
 
     private void Update() {
@@ -34,7 +28,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     }
 
     public void eat() {
-        currentHunger = 0;
+        agent.currentHunger = 0;
         closestFood.SetActive(false);
         closestFood = null;
         agent.target = null;
@@ -43,24 +37,24 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     }
 
     public void reduceVitals() {
-        currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
-        currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
-        currentAge += Time.deltaTime * agent.ageRatePerSecond;
+        agent.currentHunger += Time.deltaTime * agent.hungerRatePerSecond;
+        agent.currentThirst += Time.deltaTime * agent.thirstRatePerSecond;
+        agent.currentAge += Time.deltaTime * agent.ageRatePerSecond;
         if (agent.isPregnant) {
-            currentGestation += Time.deltaTime;
+            agent.currentGestation += Time.deltaTime;
         }
-        if (agent.genre == Genre.Female && !agent.isPregnant && agent.reproductionAge <= currentAge) {
-            currentReproductionUrge += Time.deltaTime * currentAge;
+        if (agent.gender == Gender.Female && !agent.isPregnant && agent.reproductionAge <= agent.currentAge) {
+            agent.currentReproductionUrge += Time.deltaTime * agent.currentAge;
         }
     }
 
     public void checkVitals() {
-        if (currentGestation >= agent.gestationTimeInSeconds) {
+        if (agent.currentGestation >= agent.gestationTimeInSeconds) {
             giveBirth();
         }
-        if (currentHunger >= agent.maxHunger ||
-            currentThirst >= agent.maxThirst ||
-            currentAge >= agent.averageDeathAge) {
+        if (agent.currentHunger >= agent.maxHunger ||
+            agent.currentThirst >= agent.maxThirst ||
+            agent.currentAge >= agent.averageDeathAge) {
             die();
         }
     }
@@ -158,7 +152,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     }
 
     public void drink() {
-        currentThirst = 0;
+        agent.currentThirst = 0;
         closestWater = null;
         agent.target = null;
         movementManager.setMovementState(MovementState.None);
@@ -170,7 +164,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         List<GameObject> percibedPossibleMates = new List<GameObject>();
         foreach (Collider col in percibed) {
             if (col.CompareTag("Rabbit")) {
-                if (col.GetComponent<BaseAgent>().genre == Genre.Male) {
+                if (col.GetComponent<BaseAgent>().gender == Gender.Male) {
                     percibedPossibleMates.Add(col.gameObject);
                 } // Only add male rabbits
             }
@@ -179,7 +173,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         GameObject tempClosestMate = null;
         foreach (GameObject mate in percibedPossibleMates) {
             BaseAgent mateBaseAgent = mate.GetComponent<BaseAgent>();
-            if (mate.GetComponent<RabbitAgent>().currentAge <= mateBaseAgent.reproductionAge) {
+            if (mateBaseAgent.currentAge <= mateBaseAgent.reproductionAge) {
                 continue;
             }
             float tempAttractiveness = mate.GetComponent<BaseAgent>().attractiveness;
@@ -199,7 +193,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
     }
 
     public void moveTorwardsMate() {
-        if (agent.genre == Genre.Male) {
+        if (agent.gender == Gender.Male) {
             movementManager.setMovementState(MovementState.None);
             return;
         }
@@ -209,7 +203,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         }
         if (Vector3.Distance(transform.position, closestMate.transform.position) <= agent.reproductionDistance) {
             agent.isPregnant = true;
-            currentReproductionUrge = 0;
+            agent.currentReproductionUrge = 0;
             rabbitState = RabbitState.None;
             fatherBaseAgentData = closestMate.GetComponent<BaseAgent>().getBaseAgentData();
             closestMate.GetComponent<RabbitAgent>().resetState();
@@ -265,11 +259,11 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         } // Rabbit is performing an action
         if (isCloseToHunter()) {
             rabbitState = RabbitState.Scared;
-        } else if (currentHunger >= agent.hungerTreshold) {
+        } else if (agent.currentHunger >= agent.hungerTreshold) {
             rabbitState = RabbitState.Hungry;
-        } else if (currentThirst >= agent.thirstTreshold) {
+        } else if (agent.currentThirst >= agent.thirstTreshold) {
             rabbitState = RabbitState.Thirsty;
-        } else if (currentReproductionUrge >= agent.reproductionTreshold) {
+        } else if (agent.currentReproductionUrge >= agent.reproductionTreshold) {
             rabbitState = RabbitState.LookingForMate;
         } else {
             rabbitState = RabbitState.Wandering;
@@ -320,7 +314,7 @@ public class RabbitAgent : MonoBehaviour, IEat, IReduceVitals, ILookForFood, ILo
         }
         closestMate = null;
         agent.isPregnant = false;
-        currentGestation = 0f;
+        agent.currentGestation = 0f;
     }
 
     private enum RabbitState {
