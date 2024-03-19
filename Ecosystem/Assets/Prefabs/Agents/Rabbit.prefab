@@ -532,9 +532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aafc99279363be499bc128d313deb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentData:
+  m_agentData:
     wanderAngle: 0.5
-    genre: 0
+    gender: 0
     maxSpeed: 1
     maxSteeringForce: 3
     slowingRadius: 5
@@ -547,24 +547,29 @@ MonoBehaviour:
     circleRadius: 2
     collisionObstacleAvoidanceRadius: 1
     collisionAvoidanceForce: 2
-    maxHunger: 50
+    maxHunger: 70
     hungerTreshold: 25
     hungerRatePerSecond: 3
     eatDistance: 2
+    currentHunger: 0
     maxThirst: 100
     thirstTreshold: 34
-    thirstRatePerSecond: 3
+    thirstRatePerSecond: 2.5
     drinkingDistance: 2
+    currentThirst: 0
     gestationTimeInSeconds: 13
     reproductionDistance: 2
     isPregnant: 0
     attractiveness: 50
     reproductionTreshold: 16
-    maxBabies: 5
+    maxBabies: 7
     minBabies: 1
+    currentGestation: 0
+    currentReproductionUrge: 0
     averageDeathAge: 35
     ageRatePerSecond: 0.3
-    reproductionAge: 2.564102
+    reproductionAge: 2.5
+    currentAge: 0
 --- !u!114 &7509004474085897303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,11 +582,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae13a8e35402ec4a85f59a1ddcb4cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHunger: 0
-  currentThirst: 0
-  currentGestation: 0
-  currentReproductionUrge: 0
-  currentAge: 0
   rabbitState: 0
 --- !u!114 &2525786735805846325
 MonoBehaviour:

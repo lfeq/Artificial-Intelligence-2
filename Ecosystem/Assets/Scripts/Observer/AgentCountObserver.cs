@@ -1,16 +1,19 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Observes the count of different types of agents and updates the UI accordingly.
+/// </summary>
 public class AgentCountObserver : MonoBehaviour {
     [SerializeField] private TMP_Text rabbitCountText;
     [SerializeField] private TMP_Text foxCountText;
     [SerializeField] private TMP_Text deerCountText;
     [SerializeField] private TMP_Text bearCountText;
 
-    private int rabbitCount;
-    private int foxCount;
-    private int deerCount;
-    private int bearCount;
+    private int m_rabbitCount;
+    private int m_foxCount;
+    private int m_deerCount;
+    private int m_bearCount;
 
     private void Start() {
         AgentFactory.s_instance.onRabbitBorn += rabbitBorn;
@@ -35,49 +38,49 @@ public class AgentCountObserver : MonoBehaviour {
     }
 
     private void rabbitBorn() {
-        rabbitCount++;
+        m_rabbitCount++;
         setText();
     }
 
     private void rabbitDead() {
-        rabbitCount--;
+        m_rabbitCount--;
         setText();
     }
 
     private void foxBorn() {
-        foxCount++;
+        m_foxCount++;
         setText();
     }
 
     private void foxDead() {
-        foxCount--;
+        m_foxCount--;
         setText();
     }
 
     private void deerBorn() {
-        deerCount++;
+        m_deerCount++;
         setText();
     }
 
     private void deerDead() {
-        deerCount--;
+        m_deerCount--;
         setText();
     }
 
     private void bearBorn() {
-        bearCount++;
+        m_bearCount++;
         setText();
     }
 
     private void bearDead() {
-        bearCount--;
+        m_bearCount--;
         setText();
     }
 
     private void setText() {
-        rabbitCountText.text = $"Rabbits: {rabbitCount}";
-        foxCountText.text = $"Foxes: {foxCount}";
-        deerCountText.text = $"Deers: {deerCount}";
-        bearCountText.text = $"Bears: {bearCount}";
+        rabbitCountText.text = $"Rabbits: {m_rabbitCount}";
+        foxCountText.text = $"Foxes: {m_foxCount}";
+        deerCountText.text = $"Deers: {m_deerCount}";
+        bearCountText.text = $"Bears: {m_bearCount}";
     }
 }

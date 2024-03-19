@@ -976,9 +976,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aafc99279363be499bc128d313deb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentData:
+  m_agentData:
     wanderAngle: 0.5
-    genre: 0
+    gender: 0
     maxSpeed: 1.5
     maxSteeringForce: 3.6
     slowingRadius: 5
@@ -992,13 +992,15 @@ MonoBehaviour:
     collisionObstacleAvoidanceRadius: 1
     collisionAvoidanceForce: 2
     maxHunger: 130
-    hungerTreshold: 17.09402
-    hungerRatePerSecond: 0.3550296
+    hungerTreshold: 17
+    hungerRatePerSecond: 0.35
     eatDistance: 2
+    currentHunger: 0
     maxThirst: 112
     thirstTreshold: 40
     thirstRatePerSecond: 0.2
     drinkingDistance: 2
+    currentThirst: 0
     gestationTimeInSeconds: 30
     reproductionDistance: 2
     isPregnant: 0
@@ -1006,9 +1008,12 @@ MonoBehaviour:
     reproductionTreshold: 50
     maxBabies: 3
     minBabies: 1
+    currentGestation: 0
+    currentReproductionUrge: 0
     averageDeathAge: 55
     ageRatePerSecond: 0.3
-    reproductionAge: 11.53846
+    reproductionAge: 12
+    currentAge: 0
 --- !u!114 &3410064284235247105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1033,11 +1038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de7618c36c99b5e4c99bffa5e39b1755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHunger: 0
-  currentThirst: 0
-  currentGestation: 0
-  currentReproductionUrge: 0
-  currentAge: 0
   foxState: 0
 --- !u!1 &8951578353075051512
 GameObject:

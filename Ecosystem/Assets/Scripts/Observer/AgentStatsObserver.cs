@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Observes the stats of the selected agent and updates the UI accordingly.
+/// </summary>
 public class AgentStatsObserver : MonoBehaviour {
     [SerializeField] private LayerMask animalLayerMask;
     [SerializeField] private Image currentHungerIcon;
@@ -13,7 +16,7 @@ public class AgentStatsObserver : MonoBehaviour {
     [SerializeField] private TMP_Text currentAgeText;
     [SerializeField] private TMP_Text currentAttractivnessText;
 
-    private BaseAgent currentBaseAgent;
+    private BaseAgent m_currentBaseAgent;
 
     private void Update() {
         if (LevelManager.s_instance.getLevelState() != LevelState.Playing) {
@@ -23,6 +26,9 @@ public class AgentStatsObserver : MonoBehaviour {
         setStats();
     }
 
+    /// <summary>
+    /// Selects the agent clicked on by the player.
+    /// </summary>
     private void selectAnimal() {
         if (Input.GetMouseButtonDown(0)) // Left mouse button
                 {
@@ -30,22 +36,25 @@ public class AgentStatsObserver : MonoBehaviour {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, animalLayerMask)) {
                 GameObject selectedObject = hit.collider.gameObject;
-                currentBaseAgent = selectedObject.GetComponent<BaseAgent>();
+                mcurrentBaseAgent = selectedObject.GetComponent<BaseAgent>();
             }
         }
     }
 
+    /// <summary>
+    /// Sets the UI elements to display the stats of the currently selected agent.
+    /// </summary>
     private void setStats() {
-        if (currentBaseAgent == null) {
+        if (mcurrentBaseAgent == null) {
             return;
         }
-        currentHungerIcon.fillAmount = currentBaseAgent.currentHunger / currentBaseAgent.maxHunger;
-        currentThistIcon.fillAmount = currentBaseAgent.currentThirst / currentBaseAgent.maxThirst;
-        currentReproductionUrgeIcon.fillAmount = currentBaseAgent.currentReproductionUrge / currentBaseAgent.reproductionTreshold;
-        currentGenderText.text = $"Gender: {currentBaseAgent.gender.ToString()}";
-        currentMaxSpeedText.text = $"Max Speed: {currentBaseAgent.maxSpeed}";
-        currentEyeRadiusText.text = $"Eye Radius: {currentBaseAgent.eyeRadius}";
-        currentAgeText.text = $"Age: {currentBaseAgent.currentAge}";
-        currentAttractivnessText.text = $"Attractivness: {currentBaseAgent.attractiveness}";
+        currentHungerIcon.fillAmount = mcurrentBaseAgent.currentHunger / mcurrentBaseAgent.maxHunger;
+        currentThistIcon.fillAmount = mcurrentBaseAgent.currentThirst / mcurrentBaseAgent.maxThirst;
+        currentReproductionUrgeIcon.fillAmount = mcurrentBaseAgent.currentReproductionUrge / mcurrentBaseAgent.reproductionTreshold;
+        currentGenderText.text = $"Gender: {mcurrentBaseAgent.gender.ToString()}";
+        currentMaxSpeedText.text = $"Max Speed: {mcurrentBaseAgent.maxSpeed}";
+        currentEyeRadiusText.text = $"Eye Radius: {mcurrentBaseAgent.eyeRadius}";
+        currentAgeText.text = $"Age: {mcurrentBaseAgent.currentAge}";
+        currentAttractivnessText.text = $"Attractivness: {mcurrentBaseAgent.attractiveness}";
     }
 }

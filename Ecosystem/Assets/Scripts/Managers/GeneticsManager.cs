@@ -1,7 +1,16 @@
 using UnityEngine;
 
+/// <summary>
+/// Manages genetic inheritance and mutation for agent reproduction.
+/// </summary>
 public class GeneticsManager {
 
+    /// <summary>
+    /// Reproduces a new agent based on the genes of the father and mother agents.
+    /// </summary>
+    /// <param name="t_father">Genes of the father agent.</param>
+    /// <param name="t_mother">Genes of the mother agent.</param>
+    /// <returns>Genes of the offspring agent.</returns>
     public static BaseAgentData reproduce(BaseAgentData t_father, BaseAgentData t_mother) {
         float mutationProbability = 0.1f;
         BaseAgentData sonAgent = new BaseAgentData();

@@ -1,10 +1,12 @@
 using UnityEngine;
 
-//TODO: Solo poder mover la camara cuando el levelmanager esta en estado playing
+/// <summary>
+/// Controls the movement and rotation of the camera in the scene.
+/// </summary>
 public class CameraController : MonoBehaviour {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float rotationSpeed = 100f;
-    [SerializeField] private float ascendDescendSpeed = 3f;
+    [SerializeField] private float m_moveSpeed = 5f;
+    [SerializeField] private float m_rotationSpeed = 100f;
+    [SerializeField] private float m_ascendDescendSpeed = 3f;
 
     private float verticalRotation = 0f;
 
@@ -22,19 +24,19 @@ public class CameraController : MonoBehaviour {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+        transform.Translate(moveDirection * m_moveSpeed * Time.deltaTime);
         // Rotation
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-        transform.Rotate(Vector3.up * mouseX * rotationSpeed * Time.deltaTime);
-        verticalRotation -= mouseY * rotationSpeed * Time.deltaTime;
+        transform.Rotate(Vector3.up * mouseX * m_rotationSpeed * Time.deltaTime);
+        verticalRotation -= mouseY * m_rotationSpeed * Time.deltaTime;
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
         transform.localRotation = Quaternion.Euler(verticalRotation, transform.localEulerAngles.y, 0f);
         // Ascend/Descend
         if (Input.GetKey(KeyCode.E)) {
-            transform.Translate(Vector3.up * ascendDescendSpeed * Time.deltaTime);
+            transform.Translate(Vector3.up * m_ascendDescendSpeed * Time.deltaTime);
         } else if (Input.GetKey(KeyCode.Q)) {
-            transform.Translate(Vector3.down * ascendDescendSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * m_ascendDescendSpeed * Time.deltaTime);
         }
     }
 }

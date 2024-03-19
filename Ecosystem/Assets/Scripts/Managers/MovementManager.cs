@@ -1,6 +1,8 @@
-using System.Threading;
 using UnityEngine;
 
+/// <summary>
+/// Manages the movement behavior of an agent based on its current state.
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(BaseAgent))]
 public class MovementManager : MonoBehaviour {
@@ -19,6 +21,10 @@ public class MovementManager : MonoBehaviour {
         lookAtDirection();
     }
 
+    /// <summary>
+    /// Sets the movement state of the agent.
+    /// </summary>
+    /// <param name="t_movementState">The new movement state to set.</param>
     public void setMovementState(MovementState t_movementState) {
         if (movementState == t_movementState) {
             return;
@@ -26,6 +32,9 @@ public class MovementManager : MonoBehaviour {
         movementState = t_movementState;
     }
 
+    /// <summary>
+    /// Performs movement calculations and applies steering forces to the agent's Rigidbody.
+    /// </summary>
     private void move() {
         Vector3 steeringForce = Vector3.zero;
         switch (movementState) {
@@ -62,12 +71,18 @@ public class MovementManager : MonoBehaviour {
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
     }
 
+    /// <summary>
+    /// Adjusts the rotation of the agent to face its direction of movement.
+    /// </summary>
     private void lookAtDirection() {
         Quaternion desiredRotation = Quaternion.LookRotation(rb.velocity);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime);
     }
 }
 
+/// <summary>
+/// Enumeration representing the possible movement states of an agent.
+/// </summary>
 public enum MovementState {
     None,
     Pursuing,

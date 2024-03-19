@@ -3980,9 +3980,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b611e5f143778143917db896ec10293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  rotationSpeed: 266.6667
-  ascendDescendSpeed: 3
+  m_moveSpeed: 5
+  m_rotationSpeed: 100
+  m_ascendDescendSpeed: 3
 --- !u!1 &996240451
 GameObject:
   m_ObjectHideFlags: 0
@@ -6242,10 +6242,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98bafaf88c1d2c64489c11780819570a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rabbitPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
-  foxPrefab: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
-  deerPrefab: {fileID: 8267329189155528070, guid: 3e2b04a4420d8a143b431f997dbd5e00, type: 3}
-  bearPrefab: {fileID: 1610295903417832331, guid: 8bbf9b581a18b374292be0d48b60731e, type: 3}
+  m_rabbitPrefab: {fileID: 4981082572419929675, guid: c21da7a57165c14458c7faa805c888e0, type: 3}
+  m_foxPrefab: {fileID: 8504414355862889631, guid: bc597182f19bb9f43a79ee0051e68fb5, type: 3}
+  m_deerPrefab: {fileID: 8267329189155528070, guid: 3e2b04a4420d8a143b431f997dbd5e00, type: 3}
+  m_bearPrefab: {fileID: 1610295903417832331, guid: 8bbf9b581a18b374292be0d48b60731e, type: 3}
 --- !u!4 &1941931478
 Transform:
   m_ObjectHideFlags: 0

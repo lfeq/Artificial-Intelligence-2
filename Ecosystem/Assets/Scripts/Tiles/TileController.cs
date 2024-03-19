@@ -1,6 +1,8 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Controls the properties and behavior of individual tiles in the cellular automata map.
+/// </summary>
 public class TileController : MonoBehaviour {
     [SerializeField, Header("Tile Colors")] private Color grassColor = Color.green;
     [SerializeField] private Color earthColor = Color.yellow;
@@ -27,18 +29,33 @@ public class TileController : MonoBehaviour {
         growBush();
     }
 
+    /// <summary>
+    /// Sets the type of the tile.
+    /// </summary>
+    /// <param name="t_tileType">The type of the tile.</param>
     public void setTileType(TileType t_tileType) {
         tileType = t_tileType;
     }
 
+    /// <summary>
+    /// Gets the type of the tile.
+    /// </summary>
+    /// <returns>The type of the tile.</returns>
     public TileType getTileType() {
         return tileType;
     }
 
+    /// <summary>
+    /// Sets the number of earth tiles around the current tile.
+    /// </summary>
+    /// <param name="t_earthTilesAroundTile">The number of earth tiles around the current tile.</param>
     public void setEarthTileAroundTile(int t_earthTilesAroundTile) {
         earthTilesAroundTile = t_earthTilesAroundTile;
     }
 
+    /// <summary>
+    /// Sets up the properties of the tile based on its type.
+    /// </summary>
     public void setupTiles() {
         switch (tileType) {
             case TileType.Earth:
@@ -56,6 +73,9 @@ public class TileController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Makes the tile as border tile.
+    /// </summary>
     private void setUpBorder() {
         if (earthTilesAroundTile != 9) {
             setColor(earthColor);
@@ -67,6 +87,9 @@ public class TileController : MonoBehaviour {
         setRock(true);
     }
 
+    /// <summary>
+    /// Makes the tile as earth tile.
+    /// </summary>
     private void setUpEarth() {
         setColor(earthColor);
         setTree(false);
@@ -74,6 +97,9 @@ public class TileController : MonoBehaviour {
         setRock(false);
     }
 
+    /// <summary>
+    /// Makes the tile as grass tile.
+    /// </summary>
     private void setUpGrass() {
         setColor(grassColor);
         setTree(Random.value < treeProbability);
@@ -81,6 +107,9 @@ public class TileController : MonoBehaviour {
         setRock(false);
     }
 
+    /// <summary>
+    /// Makes the tile as water tile.
+    /// </summary>
     private void setUpWater() {
         setColor(waterColor);
         setTree(false);
@@ -89,14 +118,23 @@ public class TileController : MonoBehaviour {
         gameObject.tag = "Obstacle";
     }
 
+    /// <summary>
+    /// Sets the tile color.
+    /// </summary>
     private void setColor(Color t_color) {
         GetComponent<MeshRenderer>().material.color = t_color;
     }
 
+    /// <summary>
+    /// Sets the tree status for the tile.
+    /// </summary>
     private void setTree(bool t_isTreeActive) {
         treePrefab.SetActive(t_isTreeActive);
     }
 
+    /// <summary>
+    /// Sets the bush status for the tile.
+    /// </summary>
     private void setBush(bool t_isBushActive) {
         if (treePrefab.activeSelf) {
             return;
@@ -104,10 +142,16 @@ public class TileController : MonoBehaviour {
         bushPrefab.SetActive(t_isBushActive);
     }
 
+    /// <summary>
+    /// Sets the rock status for the tile.
+    /// </summary>
     private void setRock(bool t_isRockActive) {
         rockPrefab.SetActive(t_isRockActive);
     }
 
+    /// <summary>
+    /// Grows a bush on the grass tile over time.
+    /// </summary>
     private void growBush() {
         if (bushPrefab.activeSelf || treePrefab.activeSelf) {
             return;
@@ -120,6 +164,9 @@ public class TileController : MonoBehaviour {
     }
 }
 
+/// <summary>
+/// Enumeration of tile types.
+/// </summary>
 public enum TileType {
     None,
     Grass,

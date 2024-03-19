@@ -1,6 +1,8 @@
 using UnityEngine;
 
-//TODO: Agregar funcion para checar estado del levelmanager
+/// <summary>
+/// Manages the state and initialization of the game level.
+/// </summary>
 public class LevelManager : MonoBehaviour {
     public static LevelManager s_instance;
 
@@ -21,10 +23,18 @@ public class LevelManager : MonoBehaviour {
         setLevelState(LevelState.LoadingLevel);
     }
 
+    /// <summary>
+    /// Gets the current state of the level.
+    /// </summary>
+    /// <returns>The current state of the level.</returns>
     public LevelState getLevelState() {
         return m_levelState;
     }
 
+    /// <summary>
+    /// Sets the state of the level and performs necessary actions based on the state change.
+    /// </summary>
+    /// <param name="t_levelState">The new state of the level.</param>
     public void setLevelState(LevelState t_levelState) {
         if (m_levelState == t_levelState) {
             return;
@@ -44,10 +54,16 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Loads the game level.
+    /// </summary>
     private void loadLevel() {
         CellularAutomata2D.s_instance.generateAutomata();
     }
 
+    /// <summary>
+    /// Starts the simulation by spawning initial agents based on UI settings.
+    /// </summary>
     private void startSimulation() {
         int rabbitCount = uiManager.getRabbitCount();
         int foxCount = uiManager.getFoxCount();
@@ -57,6 +73,9 @@ public class LevelManager : MonoBehaviour {
     }
 }
 
+/// <summary>
+/// Enumeration representing the possible states of the game level.
+/// </summary>
 public enum LevelState {
     None,
     LoadingLevel,

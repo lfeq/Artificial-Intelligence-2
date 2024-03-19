@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 
-//TODO: Agregar edad
+/// <summary>
+/// Serializable data class containing information about a base m_agent.
+/// </summary>
 [Serializable]
 public class BaseAgentData {
     [HideInInspector] public float wanderAngle = 0.5f;
@@ -18,7 +20,7 @@ public class BaseAgentData {
     [Header("Collision Avoidance")] public float collisionObstacleAvoidanceRadius = 5;
     public float collisionAvoidanceForce = 5;
     [Header("Hunger")] public float maxHunger = 100;
-    public float hungerTreshold = 50; //Treshold when agent starts to starve
+    public float hungerTreshold = 50; //Treshold when m_agent starts to starve
     public float hungerRatePerSecond = 0.3f;
     public float eatDistance = 2f;
     public float currentHunger;

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,10 +36,17 @@ public class CellularAutomata2D : MonoBehaviour {
         LevelManager.s_instance.setLevelState(LevelState.Menu);
     }
 
+    /// <summary>
+    /// Gets a random walkable tile's Transform.
+    /// </summary>
+    /// <returns>Transform of a random walkable tile.</returns>
     public Transform getRandomWalkableTileTransform() {
         return walkableTiles[Random.Range(0, walkableTiles.Count)].transform;
     }
 
+    /// <summary>
+    /// Draws tiles based on the generated map and sets their properties.
+    /// </summary>
     private void drawTiles() {
         m_tilesInWorld = new GameObject[gridWidth, gridHeight];
         for (int i = 0; i < gridWidth; i++) {
@@ -84,6 +90,9 @@ public class CellularAutomata2D : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Iterates over the map to generate a new map based on certain rules.
+    /// </summary>
     private void iterateNewMap() {
         bool[,] tempMap = new bool[gridWidth, gridHeight];
         for (int y = 0; y < gridHeight; y++) {
@@ -95,6 +104,12 @@ public class CellularAutomata2D : MonoBehaviour {
         m_map1 = tempMap;
     }
 
+    /// <summary>
+    /// Counts the number of walls around a tile position.
+    /// </summary>
+    /// <param name="t_xPosition">X position of the tile.</param>
+    /// <param name="t_yPosition">Y position of the tile.</param>
+    /// <returns>The number of walls around the tile position.</returns>
     private int numWallsAroundTile(int t_xPosition, int t_yPosition) {
         int numWalls = 0; // Total number of walls around current tile
         for (int y = t_yPosition - 1; y <= t_yPosition + 1; y++) {
@@ -107,6 +122,12 @@ public class CellularAutomata2D : MonoBehaviour {
         return numWalls;
     }
 
+    /// <summary>
+    /// Checks if the specified position is solid (either out of bounds or a solid tile).
+    /// </summary>
+    /// <param name="x">X position.</param>
+    /// <param name="y">Y position.</param>
+    /// <returns>True if the position is solid, false otherwise.</returns>
     private bool isSolid(int x, int y) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return true;
@@ -124,6 +145,9 @@ public class CellularAutomata2D : MonoBehaviour {
         drawTiles();
     }
 
+    /// <summary>
+    /// Sets up tiles after generating the map.
+    /// </summary>
     private void setTiles() {
         for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {

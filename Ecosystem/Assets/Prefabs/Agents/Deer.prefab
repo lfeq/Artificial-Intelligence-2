@@ -1137,9 +1137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aafc99279363be499bc128d313deb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentData:
+  m_agentData:
     wanderAngle: 0.5
-    genre: 0
+    gender: 0
     maxSpeed: 1.5
     maxSteeringForce: 3
     slowingRadius: 5
@@ -1153,13 +1153,15 @@ MonoBehaviour:
     collisionObstacleAvoidanceRadius: 1
     collisionAvoidanceForce: 2
     maxHunger: 150
-    hungerTreshold: 36.66666
+    hungerTreshold: 36
     hungerRatePerSecond: 1.2
     eatDistance: 2
+    currentHunger: 0
     maxThirst: 130
     thirstTreshold: 60
     thirstRatePerSecond: 0.3
     drinkingDistance: 2
+    currentThirst: 0
     gestationTimeInSeconds: 35
     reproductionDistance: 2
     isPregnant: 0
@@ -1167,9 +1169,12 @@ MonoBehaviour:
     reproductionTreshold: 50
     maxBabies: 5
     minBabies: 1
+    currentGestation: 0
+    currentReproductionUrge: 0
     averageDeathAge: 60
     ageRatePerSecond: 0.3
     reproductionAge: 13
+    currentAge: 0
 --- !u!114 &1693166258510817399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,9 +1199,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ed63a779d2ea644d87e0a3ca45c93e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHunger: 0
-  currentThirst: 0
-  currentGestation: 0
-  currentReproductionUrge: 0
-  currentAge: 0
   deerState: 0
