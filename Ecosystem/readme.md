@@ -1,4 +1,4 @@
-# Ecosistema Simulation Project
+# Ecosystem Simulation Project
 
 ## Introduction
 This project simulates an ecosystem inhabited by four different animals: rabbits, foxes, deer, and bears. These animals interact with each other, mimicking real-life behaviors, such as foxes hunting rabbits and rabbits hiding from predators. Each animal has variables like hunger, thirst, age, etc., which influence their decision-making.
