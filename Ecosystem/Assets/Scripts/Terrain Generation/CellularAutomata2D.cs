@@ -15,7 +15,8 @@ public class CellularAutomata2D : MonoBehaviour {
 
     private bool[,] m_map1;
     private GameObject[,] m_tilesInWorld;
-    private List<GameObject> walkableTiles = new List<GameObject>();
+    private List<GameObject> m_walkableTiles = new List<GameObject>();
+    private const int GrassDensityLimit = 5;
 
     private void Awake() {
         if (FindObjectOfType<CellularAutomata2D>() != null &&
@@ -30,7 +31,7 @@ public class CellularAutomata2D : MonoBehaviour {
     /// Generates a new 2D cellular automata map based on specified parameters.
     /// </summary>
     public void generateAutomata() {
-        GenerateRandomMap();
+        generateRandomMap();
         generateMapInSceneNoDelay();
         setTiles();
         LevelManager.s_instance.setLevelState(LevelState.Menu);
@@ -41,7 +42,7 @@ public class CellularAutomata2D : MonoBehaviour {
     /// </summary>
     /// <returns>Transform of a random walkable tile.</returns>
     public Transform getRandomWalkableTileTransform() {
-        return walkableTiles[Random.Range(0, walkableTiles.Count)].transform;
+        return m_walkableTiles[Random.Range(0, m_walkableTiles.Count)].transform;
     }
 
     /// <summary>
@@ -65,14 +66,14 @@ public class CellularAutomata2D : MonoBehaviour {
                     tileType = TileType.Border;
                 }
                 tileController.setTileType(tileType);
-                int wallsArround = numWallsAroundTile(i, j);
-                if (tileType == TileType.Grass && wallsArround != 9) {
+                int wallsAround = numberOfGrassesAroundTile(i, j);
+                if (tileType == TileType.Grass && wallsAround != 9) {
                     tileController.setTileType(TileType.Earth);
                 }
-                tileController.setEarthTileAroundTile(wallsArround);
+                tileController.setEarthTileAroundTile(wallsAround);
                 tileObj.isStatic = true;
                 if (tileType == TileType.Grass) {
-                    walkableTiles.Add(tileObj);
+                    m_walkableTiles.Add(tileObj);
                 }
             }
         }
@@ -81,7 +82,7 @@ public class CellularAutomata2D : MonoBehaviour {
     /// <summary>
     /// Generates a random initial map for the cellular automata based on specified parameters.
     /// </summary>
-    private void GenerateRandomMap() {
+    private void generateRandomMap() {
         m_map1 = new bool[gridWidth, gridHeight]; // x, y
         for (int y = 0; y < gridHeight; y++) {
             for (int x = 0; x < gridWidth; x++) {
@@ -97,38 +98,38 @@ public class CellularAutomata2D : MonoBehaviour {
         bool[,] tempMap = new bool[gridWidth, gridHeight];
         for (int y = 0; y < gridHeight; y++) {
             for (int x = 0; x < gridWidth; x++) {
-                int num = numWallsAroundTile(x, y);
-                tempMap[x, y] = num >= 5;
+                int numberOfGrasses = numberOfGrassesAroundTile(x, y);
+                tempMap[x, y] = numberOfGrasses >= GrassDensityLimit;
             }
         }
         m_map1 = tempMap;
     }
 
     /// <summary>
-    /// Counts the number of walls around a tile position.
+    /// Counts the number of grasses around a tile position.
     /// </summary>
-    /// <param name="t_xPosition">X position of the tile.</param>
-    /// <param name="t_yPosition">Y position of the tile.</param>
-    /// <returns>The number of walls around the tile position.</returns>
-    private int numWallsAroundTile(int t_xPosition, int t_yPosition) {
-        int numWalls = 0; // Total number of walls around current tile
-        for (int y = t_yPosition - 1; y <= t_yPosition + 1; y++) {
-            for (int x = t_xPosition - 1; x <= t_xPosition + 1; x++) {
-                if (isSolid(x, y)) {
-                    numWalls++;
+    /// <param name="tXPosition">X position of the tile.</param>
+    /// <param name="tYPosition">Y position of the tile.</param>
+    /// <returns>The number of grasses around the tile position.</returns>
+    private int numberOfGrassesAroundTile(int tXPosition, int tYPosition) {
+        int numberOfGrasses = 0; // Total number of grasses around current tile
+        for (int y = tYPosition - 1; y <= tYPosition + 1; y++) {
+            for (int x = tXPosition - 1; x <= tXPosition + 1; x++) {
+                if (isGrass(x, y)) {
+                    numberOfGrasses++;
                 }
             }
         }
-        return numWalls;
+        return numberOfGrasses;
     }
 
     /// <summary>
-    /// Checks if the specified position is solid (either out of bounds or a solid tile).
+    /// Checks if the specified position is grass (either out of bounds or a solid tile).
     /// </summary>
     /// <param name="x">X position.</param>
     /// <param name="y">Y position.</param>
-    /// <returns>True if the position is solid, false otherwise.</returns>
-    private bool isSolid(int x, int y) {
+    /// <returns>True if the position is grass, false otherwise.</returns>
+    private bool isGrass(int x, int y) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return true;
         }

@@ -36,7 +36,7 @@ public class AgentStatsObserver : MonoBehaviour {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, animalLayerMask)) {
                 GameObject selectedObject = hit.collider.gameObject;
-                mcurrentBaseAgent = selectedObject.GetComponent<BaseAgent>();
+                m_currentBaseAgent = selectedObject.GetComponent<BaseAgent>();
             }
         }
     }
@@ -45,16 +45,16 @@ public class AgentStatsObserver : MonoBehaviour {
     /// Sets the UI elements to display the stats of the currently selected agent.
     /// </summary>
     private void setStats() {
-        if (mcurrentBaseAgent == null) {
+        if (m_currentBaseAgent == null) {
             return;
         }
-        currentHungerIcon.fillAmount = mcurrentBaseAgent.currentHunger / mcurrentBaseAgent.maxHunger;
-        currentThistIcon.fillAmount = mcurrentBaseAgent.currentThirst / mcurrentBaseAgent.maxThirst;
-        currentReproductionUrgeIcon.fillAmount = mcurrentBaseAgent.currentReproductionUrge / mcurrentBaseAgent.reproductionTreshold;
-        currentGenderText.text = $"Gender: {mcurrentBaseAgent.gender.ToString()}";
-        currentMaxSpeedText.text = $"Max Speed: {mcurrentBaseAgent.maxSpeed}";
-        currentEyeRadiusText.text = $"Eye Radius: {mcurrentBaseAgent.eyeRadius}";
-        currentAgeText.text = $"Age: {mcurrentBaseAgent.currentAge}";
-        currentAttractivnessText.text = $"Attractivness: {mcurrentBaseAgent.attractiveness}";
+        currentHungerIcon.fillAmount = m_currentBaseAgent.currentHunger / m_currentBaseAgent.maxHunger;
+        currentThistIcon.fillAmount = m_currentBaseAgent.currentThirst / m_currentBaseAgent.maxThirst;
+        currentReproductionUrgeIcon.fillAmount = m_currentBaseAgent.currentReproductionUrge / m_currentBaseAgent.reproductionTreshold;
+        currentGenderText.text = $"Gender: {m_currentBaseAgent.gender.ToString()}";
+        currentMaxSpeedText.text = $"Max Speed: {m_currentBaseAgent.maxSpeed}";
+        currentEyeRadiusText.text = $"Eye Radius: {m_currentBaseAgent.eyeRadius}";
+        currentAgeText.text = $"Age: {m_currentBaseAgent.currentAge}";
+        currentAttractivnessText.text = $"Attractivness: {m_currentBaseAgent.attractiveness}";
     }
 }
